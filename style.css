@@ -1,16 +1,19 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — Fondo campo de flores + sobre murciélago
-   Carta estilo original (tema morado/rosa) — CSS puro, sin frameworks
+   Carta card grande, pergamino antiguo, bordes quemados — CSS puro
    ═══════════════════════════════════════════════════════════════ */
 
 :root{
   /* Sobre / carta */
   --w-sobre: min(80vw, 340px);
   --h-sobre: calc(var(--w-sobre) * 0.68);
-  --papel: #fff7ec;
-  --tinta: #5b3a4e;
-  --rosa-fuerte: #a4133c;
-  --radio: 12px;
+
+  /* Pergamino */
+  --papel: #f5e6b3;
+  --papel-borde: #c9a25b;
+  --tinta: #4a2c2a;
+  --rosa-fuerte: #8b1c3c;
+  --radio: 16px;
 
   /* Murciélago */
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
@@ -30,7 +33,6 @@ body{
   font-family:'Lora', Georgia, 'Times New Roman', serif;
   color:#fff;
   overflow:hidden;
-  /* Fondo oscuro de respaldo por si el campo de flores no carga */
   background: linear-gradient(180deg, #081a36 0%, #123252 38%, #1d4a5f 66%, #2a6b62 100%);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -53,7 +55,6 @@ body{
   pointer-events:none; z-index:0;
 }
 
-/* Luna */
 .luna{
   position:absolute; z-index:1;
   top:9%; left:13%;
@@ -66,7 +67,6 @@ body{
 }
 @keyframes respirar{ from{ opacity:.85; } to{ opacity:1; } }
 
-/* Estrellas */
 .estrella{
   position:absolute; border-radius:50%;
   background:#fff;
@@ -75,7 +75,6 @@ body{
 }
 @keyframes parpadear{ from{ opacity:.15; } to{ opacity:.95; } }
 
-/* Nubes */
 .nube{
   position:absolute; left:-32vw;
   width:calc(150px * var(--e, 1)); height:calc(44px * var(--e, 1));
@@ -95,14 +94,12 @@ body{
   to  { transform: translateX(165vw); }
 }
 
-/* Colinas */
 .colinas{
   position:absolute; inset:0; z-index:3;
   width:100%; height:100%;
   display:block;
 }
 
-/* Niebla */
 .niebla{
   position:absolute; z-index:4;
   left:-12%; right:-12%; top:64%; height:16%;
@@ -115,7 +112,6 @@ body{
   to  { transform: translateX(3vw); }
 }
 
-/* Viento global */
 #flores{
   position:absolute; inset:0; z-index:6;
   transform-origin:50% 100%;
@@ -129,7 +125,6 @@ body{
   76%     { transform: translateX(5px)  rotate(.3deg); }
 }
 
-/* Flores */
 .flor{
   position:absolute;
   transform-origin: bottom center;
@@ -181,7 +176,6 @@ body{
   to  { transform: rotate(var(--amp, 4deg)); }
 }
 
-/* Pétalos cayendo */
 .petalo{
   position:absolute; z-index:8;
   top:-9vh; left:var(--x, 50%);
@@ -213,7 +207,6 @@ body{
   to  { transform: rotate(360deg) rotateY(360deg); }
 }
 
-/* Luces flotantes */
 .luz{
   position:absolute; z-index:7;
   bottom:-4vh; left:var(--x, 50%);
@@ -238,7 +231,6 @@ body{
   to  { opacity:.95; }
 }
 
-/* Resplandor central */
 .resplandor{
   position:fixed; inset:0; pointer-events:none; z-index:0;
   background: radial-gradient(circle at 50% 26%, rgba(255,150,190,.20), transparent 62%);
@@ -267,7 +259,6 @@ body{
   transform:scale(var(--s,1));
 }
 
-/* Sombra en el suelo */
 .floor-shadow{
   position:absolute; left:50%; top:106px;
   width:272px; height:34px;
@@ -284,7 +275,6 @@ body{
   transform:translateX(-50%) translateY(40px) scale(.92);
 }
 
-/* Capa que se eleva al pasar el mouse */
 .lift{
   position:relative; z-index:2;
   transition:transform .85s cubic-bezier(.3,.7,.3,1), opacity .85s ease;
@@ -294,7 +284,6 @@ body{
 #scene.is-open .lift{transform:translateY(40px); opacity:.42}
 @keyframes entrar{from{opacity:0; transform:translateY(54px) scale(.95)}}
 
-/* Levitación del sobre */
 .floaty{
   animation:
     flotar 4.6s ease-in-out 2.1s infinite,
@@ -307,7 +296,6 @@ body{
   65%{transform:rotate(-.55deg)}
 }
 
-/* Sobre */
 .envelope{
   position:relative;
   width:360px; height:240px;
@@ -318,7 +306,6 @@ body{
   outline-offset:12px; border-radius:12px;
 }
 
-/* Grano de papel */
 .paper::after{
   content:""; position:absolute; inset:0;
   background-image:var(--noise);
@@ -326,7 +313,6 @@ body{
   pointer-events:none; border-radius:inherit;
 }
 
-/* Pared trasera */
 .env-back{
   position:absolute; inset:0; z-index:2;
   border-radius:6px;
@@ -336,7 +322,10 @@ body{
     inset 0 -8px 16px -10px rgba(40,25,60,.28);
 }
 
-/* Carta (estilo morado original dentro del sobre murciélago) */
+/* ═══════════════════════════════════════════════════════════════
+   CARTA CARD — PARCHMENT GRANDE, OPAQUE, BORDES QUEMADOS
+   ═══════════════════════════════════════════════════════════════ */
+
 .letter{
   position:absolute; left:40px; top:12px;
   width:280px; height:400px;
@@ -360,85 +349,102 @@ body{
   transition:transform .9s cubic-bezier(.16,.85,.26,1);
 }
 
-/* Hoja de la carta - estilo papel cremoso morado */
-.sheet{
+/* Card grande, opaco, pergamino, bordes quemados */
+.card{
+  position:relative;
+  width:100%; height:100%;
+  border-radius:var(--radio);
+  overflow:hidden;
+  background:var(--papel);
+  box-shadow:
+    0 0 0 4px var(--papel-borde),
+    0 10px 40px -10px rgba(0,0,0,.5),
+    inset 0 0 60px 20px rgba(120,80,30,.35);
+  will-change:transform;
+}
+
+/* Efecto bordes quemados (sencillo) */
+.card::before{
+  content:"";
   position:absolute; inset:0;
-  border-radius:14px;
-  background:
-    radial-gradient(120% 90% at 20% 0%, rgba(255,214,180,.55), transparent 55%),
-    repeating-linear-gradient(0deg, transparent 0 30px, rgba(180,110,140,.10) 30px 31px),
-    var(--papel);
-  box-shadow: 0 26px 60px rgba(15,0,25,.5), inset 0 0 40px rgba(190,120,140,.10);
-  padding: clamp(20px, 5vw, 40px) clamp(20px, 6vw, 46px) clamp(16px, 4vw, 30px);
-  color: var(--tinta);
+  border-radius:var(--radio);
+  background:radial-gradient(circle at 50% 50%, transparent 55%, rgba(40,20,10,.55) 95%);
+  pointer-events:none;
+  mix-blend-mode:multiply;
+}
+
+.card-border{
+  position:absolute; inset:-6px;
+  z-index:-1;
+  border-radius:calc(var(--radio) + 8px);
+  background:linear-gradient(135deg, #5d3a1a 0%, #2e1a0e 50%, #0f0a05 100%);
+  filter:blur(14px);
+  opacity:.75;
+  transition:opacity .5s ease;
+}
+.letter.free .card-border{ opacity:.9; }
+
+.card-content{
+  position:relative; z-index:2;
+  width:100%; height:100%;
+  padding: clamp(24px, 6vw, 46px) clamp(24px, 6vw, 46px) clamp(30px, 7vw, 52px);
+  display:flex; flex-direction:column;
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
+  color:var(--tinta);
 }
-.frame{
-  position:absolute; inset:9px;
-  border:1px solid rgba(72,54,110,.42);
-  outline:1px solid rgba(72,54,110,.18);
-  outline-offset:3px;
-  pointer-events:none;
-  border-radius:10px;
-}
-.watermark{
-  position:absolute; left:50%; top:55%;
-  width:210px; height:112px;
-  transform:translate(-50%,-50%) rotate(-8deg);
-  fill:#5a4a86; opacity:.055;
-  pointer-events:none;
-}
-.lhead{display:flex; align-items:center; gap:10px; margin:24px 24px 4px}
-.lhead::before,.lhead::after{
-  content:""; flex:1; height:1px;
-  background:linear-gradient(90deg, rgba(72,54,110,0), rgba(72,54,110,.5));
-}
-.lhead::after{background:linear-gradient(90deg, rgba(72,54,110,.5), rgba(72,54,110,0))}
-.lhead svg{width:36px; height:19px; flex:none; fill:#4a3a70; opacity:.85}
 
-/* Título de la carta - estilo original */
+/* Título de la carta */
 .carta-titulo{
   font-family:'Dancing Script', cursive;
   font-weight:700;
   color: var(--rosa-fuerte);
   text-align:center;
-  font-size: clamp(1.7rem, 6.5vw, 2.3rem);
+  font-size: clamp(2rem, 7vw, 2.8rem);
   line-height:1.15;
-  margin: 0 0 6px 0;
+  margin: 0 0 10px 0;
+  letter-spacing:1px;
 }
 .carta-titulo::after{
   content:"♥";
   display:block;
-  font-size:.8rem;
-  letter-spacing:4px;
-  color:#c9184a;
-  opacity:.6;
-  margin-top:4px;
+  font-size:.85rem;
+  letter-spacing:6px;
+  color:#a4133c;
+  opacity:.7;
+  margin-top:6px;
 }
 
-/* Mensaje - estilo original */
+/* Mensaje */
 .mensaje{
-  margin-top: clamp(8px, 2.5vh, 16px);
-  padding-right: 6px;
+  flex:1;
+  margin-top: clamp(10px, 3vh, 20px);
+  padding-right: 8px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(164,19,60,.35) transparent;
+  scrollbar-color: rgba(139,28,60,.35) transparent;
 }
 .mensaje p{
-  font-size: clamp(.98rem, 2.7vw, 1.08rem);
-  line-height:1.75;
-  margin:.45em 0;
-  min-height:1.75em;
+  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+  line-height:1.85;
+  margin:.55em 0;
+  min-height:1.85em;
+  text-align:left;
 }
-.mensaje p:first-child,
+.mensaje p:first-child{
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  color: var(--rosa-fuerte);
+  line-height:1.35;
+  font-weight:700;
+}
 .mensaje p.ultimo{
   font-family:'Dancing Script', cursive;
-  font-size: clamp(1.3rem, 4.6vw, 1.6rem);
+  font-size: clamp(1.4rem, 4.8vw, 1.75rem);
   color: var(--rosa-fuerte);
-  line-height:1.4;
+  line-height:1.35;
+  margin-top:1.1em;
 }
-.mensaje p.ultimo{ margin-top:.9em; }
 
 /* Cursor de máquina de escribir */
 .cursor{
@@ -454,30 +460,30 @@ body{
   50%    { opacity:0; }
 }
 
-/* Firma - estilo original */
+/* Firma */
 .firma{
-  margin-top:10px;
+  margin-top:14px;
   text-align:right;
   font-family:'Dancing Script', cursive;
-  font-size: clamp(1.35rem, 4.8vw, 1.7rem);
+  font-size: clamp(1.45rem, 5vw, 1.9rem);
   color: var(--rosa-fuerte);
   display:flex; align-items:center; justify-content:flex-end; gap:10px;
   opacity:0;
-  transform: translateY(10px);
+  transform: translateY(12px);
   transition: opacity .9s ease .15s, transform .9s ease .15s;
 }
 .firma .latido.visible{ opacity:1; transform:none; }
 .firma .latido{
   display:inline-block;
-  color:#e0234e;
-  font-size:.9em;
+  color:#c0233e;
+  font-size:1em;
   animation: latirCorazon 1.1s ease-in-out infinite;
 }
 @keyframes latirCorazon{
   0%,100%{ transform:scale(1); }
-  30%    { transform:scale(1.25); }
+  30%    { transform:scale(1.3); }
   45%    { transform:scale(1); }
-  60%    { transform:scale(1.18); }
+  60%    { transform:scale(1.15); }
 }
 
 /* Aleteo mientras sube + flotación */
@@ -522,7 +528,6 @@ body{
   filter:drop-shadow(0 -2px 1.5px rgba(70,50,90,.18));
 }
 
-/* Sombra elástica de solapa cerrada */
 .flap-shadow{
   position:absolute; left:0; top:0; z-index:6;
   width:100%; height:142px;
@@ -533,7 +538,6 @@ body{
 }
 #scene.flap-open .flap-shadow{opacity:0; transition:opacity .5s ease}
 
-/* Solapa superior 3D */
 .flap{
   position:absolute; left:0; top:0;
   width:100%; height:142px;
@@ -636,7 +640,6 @@ body{
 @keyframes brillo{0%,55%{background-position:130% 0} 85%,100%{background-position:-40% 0}}
 .seal.crack::before{opacity:0; animation:none}
 
-/* Murciélaguecillos que escapan */
 .flybat{
   position:absolute; left:36px; top:34px;
   width:24px; height:13px;
@@ -667,7 +670,7 @@ body{
   .letter.rise .sheet, .letter.free .sheet, .resplandor{
     animation: none !important;
   }
-  .carta, .flap, .seal, .zona-sobre{
+  .flap, .seal{
     transition-duration:.2s !important;
     transition-delay:0s !important;
   }

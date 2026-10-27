@@ -78,20 +78,16 @@
             <!-- 1 · pared trasera (interior del sobre) -->
             <div class="env-back paper"></div>
 
-            <!-- 2 · LA CARTA (estilo original, tema morado) -->
+            <!-- 2 · LA CARTA (card grande, pergamino, bordes quemados) -->
             <div class="letter" id="letter">
-              <div class="sheet paper">
-                <div class="frame"></div>
-                <svg class="watermark" viewBox="0 0 120 64" aria-hidden="true"><use href="#bat"/></svg>
-                <div class="lhead">
-                  <svg viewBox="0 0 120 64" aria-hidden="true"><use href="#bat"/></svg>
+              <div class="card">
+                <div class="card-border"></div>
+                <div class="card-content">
+                  <svg class="watermark" viewBox="0 0 120 64" aria-hidden="true"><use href="#bat"/></svg>
+                  <h2 id="tituloCarta" class="carta-titulo"></h2>
+                  <div id="mensaje" class="mensaje"></div>
+                  <div id="firma" class="firma"></div>
                 </div>
-                <!-- Título de la carta -->
-                <h2 id="tituloCarta" class="carta-titulo"></h2>
-                <!-- Aquí se escribe el mensaje (máquina de escribir) -->
-                <div id="mensaje" class="mensaje"></div>
-                <!-- Firma -->
-                <div id="firma" class="firma"></div>
               </div>
             </div>
 

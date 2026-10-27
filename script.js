@@ -2,7 +2,7 @@
    SOBRE SORPRESA PARA NAYDÚ — JavaScript Vanilla
    Fondo: campo de flores nocturno
    Sobre: murciélago (sello, solapa 3D, carta animada)
-   Carta: estilo original (tema morado/rosa) + máquina de escribir
+   Carta: card grande, pergamino antiguo, bordes quemados, máquina de escribir
    ═══════════════════════════════════════════════════════════════ */
 
  /* ┌──────────────────────────────────────────────────────────┐
@@ -170,7 +170,6 @@ async function iniciarCarta() {
   // Firma (se muestra al terminar)
   firmaEl.innerHTML = "";
   const sign = document.createElement("span");
-  sign.className = "sign";
   sign.textContent = FIRMA;
   firmaEl.append(sign);
   firmaEl.append(document.createTextNode(" "));
