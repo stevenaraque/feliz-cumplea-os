@@ -1,28 +1,16 @@
 /* ═══════════════════════════════════════════════════════════════
-   SOBRE SORPRESA PARA NAYDÚ — Fondo campo de flores + sobre murciélago
-   Carta card grande, pergamino antiguo, bordes quemados — CSS puro
+   SOBRE SORPRESA PARA NAYDÚ — Fondo campo de flores + carta original
+   Carta como card/subpágina grande, estilo original (morado/rosa)
+   CSS puro, sin frameworks
    ═══════════════════════════════════════════════════════════════ */
 
 :root{
-  /* Sobre / carta */
   --w-sobre: min(80vw, 340px);
   --h-sobre: calc(var(--w-sobre) * 0.68);
-
-  /* Pergamino */
-  --papel: #f5e6b3;
-  --papel-borde: #c9a25b;
-  --tinta: #4a2c2a;
-  --rosa-fuerte: #8b1c3c;
-  --radio: 16px;
-
-  /* Murciélago */
-  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-  --tinta-m: #3a3350;
-  --cera1:#8a6fb8;
-  --cera2:#5b4386;
-  --cera3:#3c2a63;
-  --cera4:#241646;
-  --cera5:#150b30;
+  --papel: #fff7ec;
+  --tinta: #5b3a4e;
+  --rosa-fuerte: #a4133c;
+  --radio: 12px;
 }
 
 *{ margin:0; padding:0; box-sizing:border-box; }
@@ -239,208 +227,207 @@ body{
 @keyframes latirBrillo{ from{ opacity:.55; } to{ opacity:1; } }
 
 /* ═══════════════════════════════════════════════════════════════
-   ESCENARIO Y SOBRE MURCIÉLAGO
+   ESCENA Y SOBRE (estilo original)
    ═══════════════════════════════════════════════════════════════ */
 
-.stage{
+.escena{
+  position:fixed; inset:0; z-index:10;
+  display:grid; place-items:center;
+}
+
+.zona-sobre{
+  position:relative; z-index:11;
+  cursor:pointer; outline:none;
+  user-select:none; -webkit-user-select:none;
+  transition: opacity .65s ease .05s, transform .7s ease .05s;
+}
+.zona-sobre:focus-visible{
+  outline:2px dashed rgba(255,183,205,.85);
+  outline-offset:16px; border-radius:18px;
+}
+
+body.leyendo .zona-sobre{
+  opacity:0;
+  transform: translateY(90px) scale(.9);
+  pointer-events:none;
+}
+
+/* El sobre */
+.sobre{
   position:relative;
-  width:100%;
-  height:100vh;
-  height:100svh;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  z-index:10;
+  width:var(--w-sobre); height:var(--h-sobre);
+  perspective: 1100px;
+  animation: mecer 3.8s ease-in-out infinite;
+  filter: drop-shadow(0 20px 34px rgba(10,0,20,.45));
+  transition: filter .35s ease;
 }
-.scene{
-  position:relative;
-  width:360px;
-  height:240px;
-  transform:scale(var(--s,1));
+@keyframes mecer{
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-9px); }
 }
 
-.floor-shadow{
-  position:absolute; left:50%; top:106px;
-  width:272px; height:34px;
-  transform:translateX(-50%);
-  background:radial-gradient(ellipse at 50% 50%, rgba(20,12,38,.32) 0%, rgba(20,12,38,0) 66%);
-  filter:blur(7px);
-  opacity:.85; z-index:0;
-  animation:sombra 4.6s ease-in-out 2s infinite;
-  transition:opacity .85s ease, transform .85s ease;
+.zona-sobre:hover .sobre{
+  animation: latirSobre 1.05s ease-in-out infinite;
+  filter: drop-shadow(0 24px 46px rgba(255,80,140,.38));
 }
-@keyframes sombra{50%{transform:translateX(-50%) scale(.9)}}
-#scene.is-open .floor-shadow{
-  animation:none; opacity:.16;
-  transform:translateX(-50%) translateY(40px) scale(.92);
+@keyframes latirSobre{
+  0%,100%{ transform: scale(1); }
+  50%    { transform: scale(1.05); }
 }
 
-.lift{
-  position:relative; z-index:2;
-  transition:transform .85s cubic-bezier(.3,.7,.3,1), opacity .85s ease;
-  animation:entrar .95s cubic-bezier(.2,.85,.3,1) .15s backwards;
-}
-#scene:not(.is-open):hover .lift{transform:translateY(-9px)}
-#scene.is-open .lift{transform:translateY(40px); opacity:.42}
-@keyframes entrar{from{opacity:0; transform:translateY(54px) scale(.95)}}
-
-.floaty{
-  animation:
-    flotar 4.6s ease-in-out 2.1s infinite,
-    sacudir .4s ease-in-out 1.5s;
-}
-@keyframes flotar{50%{transform:translateY(-8px) rotate(.35deg)}}
-@keyframes sacudir{
-  0%,100%{transform:none}
-  30%{transform:translateY(1.5px) rotate(.7deg)}
-  65%{transform:rotate(-.55deg)}
+.sobre-atras{
+  position:absolute; inset:0; z-index:0;
+  background: linear-gradient(180deg, #a02a57, #7c1f47);
+  border-radius: var(--radio);
+  box-shadow: inset 0 0 24px rgba(0,0,0,.22);
 }
 
-.envelope{
-  position:relative;
-  width:360px; height:240px;
-  perspective:1200px;
-}
-.envelope:focus-visible{
-  outline:2px dashed rgba(132,100,196,.8);
-  outline-offset:12px; border-radius:12px;
-}
-
-.paper::after{
-  content:""; position:absolute; inset:0;
-  background-image:var(--noise);
-  opacity:.11; mix-blend-mode:multiply;
-  pointer-events:none; border-radius:inherit;
-}
-
-.env-back{
+.sobre-frente{
   position:absolute; inset:0; z-index:2;
-  border-radius:6px;
-  background:linear-gradient(180deg,#e9e3d5 0%,#ddd5c4 100%);
-  box-shadow:
-    inset 0 18px 26px -14px rgba(40,25,60,.5),
-    inset 0 -8px 16px -10px rgba(40,25,60,.28);
+  background: linear-gradient(175deg, #d0567f 0%, #c04370 45%, #a52f5e 100%);
+  border-radius: var(--radio);
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
 }
+
+.sobre-solapa{
+  position:absolute; top:0; left:0; width:100%; height:56%;
+  z-index:3;
+  background: linear-gradient(180deg, #d1537c, #b83868);
+  border-radius: var(--radio) var(--radio) 0 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform .85s cubic-bezier(.55,.06,.35,1);
+  backface-visibility: visible;
+}
+body.abierto .sobre-solapa{
+  transform: rotateX(180deg);
+  z-index:0;
+}
+
+.sello{
+  position:absolute; z-index:4;
+  left:50%; top: calc(var(--h-sobre) * .52);
+  transform: translate(-50%, -50%);
+  width: calc(var(--w-sobre) * .20); height: calc(var(--w-sobre) * .20);
+  border-radius:50%;
+  display:grid; place-items:center;
+  background: radial-gradient(circle at 34% 30%, #ff7d9c, #d81b60 62%, #a4133c 100%);
+  box-shadow: 0 6px 16px rgba(120,10,50,.5), inset 0 2px 6px rgba(255,255,255,.35);
+  color:#ffe1ea;
+  font-size: calc(var(--w-sobre) * .085);
+  line-height:1;
+  pointer-events:none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+body.abierto .sello{
+  opacity:0;
+  transform: translate(-50%, -50%) scale(.5);
+}
+
+.pista{
+  position:absolute;
+  top: calc(100% + 26px); left:50%;
+  transform: translateX(-50%);
+  white-space:nowrap;
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  color:#ffd3e0;
+  text-shadow: 0 2px 12px rgba(255,120,170,.45);
+  animation: palpitar 2.2s ease-in-out infinite;
+}
+@keyframes palpitar{
+  0%,100%{ transform: translate(-50%, 0);   opacity:.72; }
+  50%    { transform: translate(-50%, -5px); opacity:1; }
+}
+body.leyendo .pista{ opacity:0; transition: opacity .3s ease; }
 
 /* ═══════════════════════════════════════════════════════════════
-   CARTA CARD — PARCHMENT GRANDE, OPAQUE, BORDES QUEMADOS
+   CARTA — CARD GRANDE, SUBPÁGINA, ESTILO ORIGINAL (MORADO/ROSA)
    ═══════════════════════════════════════════════════════════════ */
 
-.letter{
-  position:absolute; left:40px; top:12px;
-  width:280px; height:400px;
-  z-index:3;
-  transform-origin:50% 50%;
-  perspective:900px;
-  clip-path:inset(0 0 172px 0);
-  transition:
-    transform 1.05s cubic-bezier(.33,.6,.25,1),
-    clip-path 1.05s cubic-bezier(.33,.6,.25,1);
-  will-change:transform, clip-path;
-  cursor:pointer;
-}
-.letter.rise{
-  transform:translateY(-180px) rotate(1.4deg);
-  clip-path:inset(0 0 0 0);
-}
-.letter.free{
-  z-index:9;
-  transform:translateY(-262px) rotate(-1.6deg) scale(1.16);
-  transition:transform .9s cubic-bezier(.16,.85,.26,1);
-}
-
-/* Card grande, opaco, pergamino, bordes quemados */
-.card{
-  position:relative;
-  width:100%; height:100%;
-  border-radius:var(--radio);
-  overflow:hidden;
-  background:var(--papel);
-  box-shadow:
-    0 0 0 4px var(--papel-borde),
-    0 10px 40px -10px rgba(0,0,0,.5),
-    inset 0 0 60px 20px rgba(120,80,30,.35);
-  will-change:transform;
-}
-
-/* Efecto bordes quemados (sencillo) */
-.card::before{
-  content:"";
-  position:absolute; inset:0;
-  border-radius:var(--radio);
-  background:radial-gradient(circle at 50% 50%, transparent 55%, rgba(40,20,10,.55) 95%);
+.carta{
+  position:absolute; z-index:1;
+  left:50%; top:50%;
+  width:min(90vw, 620px);
+  height:min(88dvh, 720px);
+  transform: translate(-50%, -50%) translateY(0) scale(.46);
+  transition: transform 1.05s cubic-bezier(.22,.9,.32,1) .55s;
   pointer-events:none;
-  mix-blend-mode:multiply;
 }
 
-.card-border{
-  position:absolute; inset:-6px;
-  z-index:-1;
-  border-radius:calc(var(--radio) + 8px);
-  background:linear-gradient(135deg, #5d3a1a 0%, #2e1a0e 50%, #0f0a05 100%);
-  filter:blur(14px);
-  opacity:.75;
-  transition:opacity .5s ease;
+/* Fase 1: la hoja sube saliendo del sobre */
+body.abierto .carta{
+  transform: translate(-50%, -50%) translateY(-34%) scale(.62);
 }
-.letter.free .card-border{ opacity:.9; }
 
-.card-content{
-  position:relative; z-index:2;
+/* Fase 2: la carta queda centrada y grande como protagonista (subpágina) */
+body.leyendo .carta{
+  transform: translate(-50%, -50%) translateY(0) scale(1);
+  z-index:12;
+  pointer-events:auto;
+  transition: transform 1s cubic-bezier(.2,.85,.25,1);
+}
+
+.carta-papel{
   width:100%; height:100%;
-  padding: clamp(24px, 6vw, 46px) clamp(24px, 6vw, 46px) clamp(30px, 7vw, 52px);
   display:flex; flex-direction:column;
+  background:
+    radial-gradient(120% 90% at 20% 0%, rgba(255,214,180,.55), transparent 55%),
+    repeating-linear-gradient(0deg, transparent 0 30px, rgba(180,110,140,.10) 30px 31px),
+    var(--papel);
+  border-radius:14px;
+  box-shadow: 0 26px 60px rgba(15,0,25,.5), inset 0 0 40px rgba(190,120,140,.10);
+  padding: clamp(24px, 6vw, 56px) clamp(24px, 6vw, 64px) clamp(30px, 7vw, 60px);
+  color: var(--tinta);
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
-  color:var(--tinta);
 }
 
-/* Título de la carta */
 .carta-titulo{
   font-family:'Dancing Script', cursive;
   font-weight:700;
   color: var(--rosa-fuerte);
   text-align:center;
-  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
   line-height:1.15;
-  margin: 0 0 10px 0;
-  letter-spacing:1px;
+  margin: 0 0 8px 0;
 }
 .carta-titulo::after{
   content:"♥";
   display:block;
   font-size:.85rem;
   letter-spacing:6px;
-  color:#a4133c;
+  color:#c9184a;
   opacity:.7;
   margin-top:6px;
 }
 
-/* Mensaje */
 .mensaje{
   flex:1;
-  margin-top: clamp(10px, 3vh, 20px);
+  margin-top: clamp(12px, 3vh, 24px);
   padding-right: 8px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(139,28,60,.35) transparent;
+  scrollbar-color: rgba(164,19,60,.35) transparent;
 }
 .mensaje p{
-  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
-  line-height:1.85;
-  margin:.55em 0;
-  min-height:1.85em;
+  font-size: clamp(1.1rem, 2.9vw, 1.35rem);
+  line-height:1.9;
+  margin:.6em 0;
+  min-height:1.9em;
   text-align:left;
 }
 .mensaje p:first-child{
   font-family:'Dancing Script', cursive;
-  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  font-size: clamp(1.7rem, 5.2vw, 2.1rem);
   color: var(--rosa-fuerte);
   line-height:1.35;
   font-weight:700;
 }
 .mensaje p.ultimo{
   font-family:'Dancing Script', cursive;
-  font-size: clamp(1.4rem, 4.8vw, 1.75rem);
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
   color: var(--rosa-fuerte);
   line-height:1.35;
   margin-top:1.1em;
@@ -462,14 +449,14 @@ body{
 
 /* Firma */
 .firma{
-  margin-top:14px;
+  margin-top:16px;
   text-align:right;
   font-family:'Dancing Script', cursive;
-  font-size: clamp(1.45rem, 5vw, 1.9rem);
+  font-size: clamp(1.6rem, 5.2vw, 2.1rem);
   color: var(--rosa-fuerte);
   display:flex; align-items:center; justify-content:flex-end; gap:10px;
   opacity:0;
-  transform: translateY(12px);
+  transform: translateY(14px);
   transition: opacity .9s ease .15s, transform .9s ease .15s;
 }
 .firma .latido.visible{ opacity:1; transform:none; }
@@ -486,191 +473,33 @@ body{
   60%    { transform:scale(1.15); }
 }
 
-/* Aleteo mientras sube + flotación */
-.letter.rise .sheet{animation:aleteo 1.05s ease-in-out both}
-@keyframes aleteo{
-  0%{transform:rotateX(7deg)}
-  35%{transform:rotateX(-4.5deg)}
-  70%{transform:rotateX(2.5deg)}
-  100%{transform:rotateX(0)}
-}
-.letter.free .sheet{animation:flotarCarta 5.5s ease-in-out 1.1s infinite}
-@keyframes flotarCarta{50%{transform:translateY(-7px) rotate(.5deg)}}
-
-/* Frente del sobre */
-.env-front{
-  position:absolute; inset:0; z-index:5;
-  border-radius:6px;
-  background:linear-gradient(155deg,#ffffff 0%,#f4f1ea 48%,#e9e4d8 100%);
-  box-shadow:0 1px 2px rgba(40,30,20,.15);
-}
-.env-front::before{
-  content:""; position:absolute; inset:0; border-radius:inherit;
-  background:linear-gradient(180deg, rgba(60,40,80,.16), rgba(60,40,80,0) 16%);
-  transition:opacity .6s ease; pointer-events:none;
-}
-#scene.flap-open .env-front::before{opacity:0}
-
-.fold{position:absolute; inset:0}
-.fold-l{
-  clip-path:polygon(0 0, 0 100%, 44% 100%);
-  background:linear-gradient(115deg,#f7f4ee 0%,#ece7db 70%,#e3ddcf 100%);
-  filter:drop-shadow(2px 2px 1.5px rgba(70,50,90,.20));
-}
-.fold-r{
-  clip-path:polygon(100% 0, 100% 100%, 56% 100%);
-  background:linear-gradient(-115deg,#f7f4ee 0%,#ece7db 70%,#e3ddcf 100%);
-  filter:drop-shadow(-2px 2px 1.5px rgba(70,50,90,.20));
-}
-.fold-b{
-  clip-path:polygon(0 100%, 100% 100%, 50% 40%);
-  background:linear-gradient(0deg,#f3efe5 0%,#eae4d6 60%,#e1dac8 100%);
-  filter:drop-shadow(0 -2px 1.5px rgba(70,50,90,.18));
-}
-
-.flap-shadow{
-  position:absolute; left:0; top:0; z-index:6;
-  width:100%; height:142px;
-  clip-path:polygon(0 0, 100% 0, 50% 100%);
-  background:linear-gradient(180deg, rgba(55,38,80,.18) 0%, rgba(55,38,80,.05) 40%, rgba(55,38,80,0) 72%);
-  opacity:1; pointer-events:none;
-  transition:opacity .7s ease .4s;
-}
-#scene.flap-open .flap-shadow{opacity:0; transition:opacity .5s ease}
-
-.flap{
-  position:absolute; left:0; top:0;
-  width:100%; height:142px;
-  z-index:7;
-  transform-origin:50% 0;
-  transform-style:preserve-3d;
-  transition:transform 1.05s cubic-bezier(.62,.05,.28,1);
-  will-change:transform;
-}
-.flap.open{transform:rotateX(178deg)}
-.flap.behind{z-index:1}
-
-.flap-face{
-  position:absolute; inset:0;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  clip-path:polygon(0 0, 100% 0, 50% 100%);
-}
-.flap-out{
-  background:
-    linear-gradient(180deg, rgba(70,50,90,.14), rgba(70,50,90,0) 24%),
-    linear-gradient(180deg,#fdfbf6 0%,#f1ecdf 62%,#dfd8c6 100%);
-}
-.flap-in{
-  transform:rotateX(180deg);
-  background:linear-gradient(180deg,#322454 0%,#231641 55%,#180e30 100%);
-  box-shadow:inset 0 -12px 24px -8px rgba(0,0,0,.55);
-}
-.flap-in::before{
-  content:""; position:absolute; inset:0;
-  background:
-    repeating-linear-gradient(45deg,  rgba(255,255,255,.05) 0 1.5px, transparent 1.5px 11px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 1.5px, transparent 1.5px 13px);
-}
-
-/* Sello de cera con murciélago */
-.seal{
-  position:absolute; left:50%; top:129px;
-  width:96px; height:96px;
-  z-index:8;
-  transform:translate(-50%,-50%);
-  filter:drop-shadow(0 8px 10px rgba(15,8,30,.4));
-  animation:
-    estampar .5s cubic-bezier(.3,1.5,.45,1) 1.05s backwards,
-    latir 3.4s ease-in-out 2s infinite;
-}
-@keyframes estampar{
-  from{opacity:0; transform:translate(-50%,-50%) scale(2)}
-  55%{opacity:1; transform:translate(-50%,-50%) scale(.92)}
-  to{transform:translate(-50%,-50%) scale(1)}
-}
-@keyframes latir{50%{transform:translate(-50%,-52%) scale(1.05)}}
-.seal.crack{animation:none}
-
-.seal-piece{
-  position:absolute; inset:0;
-  transition:
-    transform .62s cubic-bezier(.5,-.35,.45,1.25),
-    opacity .5s ease-in .08s;
-  will-change:transform, opacity;
-}
-.sp1{clip-path:polygon(0 0, 62% 0, 34% 100%, 0 100%)}
-.sp2{clip-path:polygon(62% 0, 100% 0, 100% 58%, 34% 100%)}
-.sp3{clip-path:polygon(0 100%, 34% 100%, 100% 58%, 100% 100%)}
-.seal.crack .sp1{transform:translate(-30px,-40px) rotate(-48deg); opacity:0; transition-delay:0s,.05s}
-.seal.crack .sp2{transform:translate(36px,-22px)  rotate(40deg);  opacity:0; transition-delay:.07s,.13s}
-.seal.crack .sp3{transform:translate(4px,46px)   rotate(74deg);  opacity:0; transition-delay:.14s,.2s}
-
-.seal-face{
-  position:absolute; inset:0;
-  border-radius:46% 54% 52% 48% / 52% 44% 56% 48%;
-  background:radial-gradient(circle at 34% 28%,
-    var(--cera1) 0%, var(--cera2) 24%, var(--cera3) 48%,
-    var(--cera4) 72%, var(--cera5) 100%);
-  box-shadow:
-    inset 0 3px 6px rgba(255,255,255,.16),
-    inset 0 -7px 12px rgba(0,0,0,.55),
-    inset 0 0 0 2px rgba(18,8,40,.35);
-}
-.seal-face::after{
-  content:""; position:absolute; inset:8px;
-  border-radius:inherit;
-  border:1.5px solid rgba(255,255,255,.10);
-  box-shadow:inset 0 2px 4px rgba(0,0,0,.45), 0 1px 1px rgba(255,255,255,.07);
-}
-.seal-face svg{
-  position:absolute; left:50%; top:50%;
-  width:72px; height:38px;
-  transform:translate(-50%,-52%);
-}
-.seal::before{
-  content:""; position:absolute; inset:-4px; z-index:3;
-  background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.30) 50%, transparent 58%);
-  background-size:280% 280%; background-position:130% 0;
-  mix-blend-mode:soft-light;
-  animation:brillo 5.2s ease-in-out 2.4s infinite;
-  pointer-events:none;
-  transition:opacity .3s;
-}
-@keyframes brillo{0%,55%{background-position:130% 0} 85%,100%{background-position:-40% 0}}
-.seal.crack::before{opacity:0; animation:none}
-
-.flybat{
-  position:absolute; left:36px; top:34px;
-  width:24px; height:13px;
-  fill:#1c1136; opacity:0; pointer-events:none;
-}
-@keyframes volar{
-  0%{opacity:0; transform:translate(0,0) rotate(8deg) scale(.5)}
-  12%{opacity:.9}
-  100%{opacity:0; transform:translate(var(--dx),var(--dy)) rotate(var(--dr)) scale(.95)}
-}
-.seal.crack .flybat{animation:volar 1.25s cubic-bezier(.25,.6,.35,1) both}
-.seal.crack .f1{animation-delay:.02s}
-.seal.crack .f2{animation-delay:.10s}
-.seal.crack .f3{animation-delay:.18s}
-.seal.crack .f4{animation-delay:.26s}
-
 /* ═══════════════════════════════════════════════════════════════
    RESPONSIVE Y ACCESIBILIDAD
    ═══════════════════════════════════════════════════════════════ */
 
-@media (max-height:760px){.scene{--s:.86}}
-@media (max-width:520px),(max-height:640px){.scene{--s:.76}}
-@media (max-width:380px),(max-height:520px){.scene{--s:.64}}
+@media (max-width: 480px){
+  .carta{
+    width:min(94vw, 560px);
+    height:min(92dvh, 760px);
+  }
+  .carta-papel{
+    padding: clamp(18px, 5vw, 40px) clamp(18px, 6vw, 48px) clamp(24px, 6vw, 48px);
+  }
+}
+
+@media (max-height: 700px){
+  .carta{ height:min(94dvh, 760px); }
+  body.abierto .carta{
+    transform: translate(-50%, -50%) translateY(-30%) scale(.52);
+  }
+}
 
 @media (prefers-reduced-motion: reduce){
   .luna, .estrella, .nube, .niebla, #flores, .flor, .petalo, .luz,
-  .floaty, .seal, .floor-shadow, .flybat, .seal::before, .lift,
-  .letter.rise .sheet, .letter.free .sheet, .resplandor{
+  .resplandor{
     animation: none !important;
   }
-  .flap, .seal{
+  .sobre, .sobre-solapa, .zona-sobre, .carta{
     transition-duration:.2s !important;
     transition-delay:0s !important;
   }

@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — JavaScript Vanilla
    Fondo: campo de flores nocturno
-   Sobre: murciélago (sello, solapa 3D, carta animada)
-   Carta: card grande, pergamino antiguo, bordes quemados, máquina de escribir
+   Sobre: estilo original (rosado/púrpura)
+   Carta: card grande, subpágina, máquina de escribir
    ═══════════════════════════════════════════════════════════════ */
 
  /* ┌──────────────────────────────────────────────────────────┐
@@ -106,12 +106,12 @@ let PAUSA_LINEA     = 400;  // pausa entre líneas
    A partir de aquí no necesitas tocar nada.
    ═══════════════════════════════════════════════════════════════ */
 
-const scene     = document.getElementById("scene");
-const flap      = document.getElementById("flap");
-const letter    = document.getElementById("letter");
-const seal      = document.getElementById("seal");
-const mensajeEl = document.getElementById("mensaje");
-const firmaEl   = document.getElementById("firma");
+const zonaSobre  = document.getElementById("zonaSobre");
+const escena     = document.getElementById("escena");
+const cartaEl    = document.getElementById("carta");
+const mensajeEl  = document.getElementById("mensaje");
+const firmaEl    = document.getElementById("firma");
+const tituloEl   = document.getElementById("tituloCarta");
 
 let abierta     = false;
 let escribiendo = false;
@@ -122,66 +122,38 @@ if (reduceMov) { VELOCIDAD_TECLA = 8; PAUSA_LINEA = 100; }
 
 const LINEAS = [SALUDO, ...MENSAJE, DESPEDIDA];
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+/* ── Apertura del sobre (estilo original) ─────────────────────── */
 
-/* ═══════════════════════════════════════════════════════════════
-   APERTURA DEL SOBRE (secuencia del murciélago)
-   ═══════════════════════════════════════════════════════════════ */
-
-async function abrirCarta() {
+function abrirCarta() {
   if (abierta) return;
   abierta = true;
 
-  // 1) La cera se resquebraja y los murciélaguecillos huyen
-  seal.classList.add("crack");
-  await sleep(520);
+  document.body.classList.add("abierto");   // solapa gira + hoja sube
+  explotarCorazones();
 
-  // 2) La solapa gira en 3D
-  flap.classList.add("open");
-  scene.classList.add("flap-open");
-  await sleep(500);
-  flap.classList.add("behind");
-  await sleep(560);
-
-  // 3) La carta emerge aleteando
-  letter.classList.add("rise");
-  await sleep(1020);
-
-  // 4) La carta flota al centro y crece; el sobre se recede
-  letter.classList.add("free");
-  scene.classList.add("is-open");
-  await sleep(950);
-
-  iniciarCarta();
+  setTimeout(() => document.body.classList.add("leyendo"), reduceMov ? 200 : 1600);
+  setTimeout(iniciarCarta, reduceMov ? 400 : 2700);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ESCRITURA DE LA CARTA (efecto máquina de escribir)
-   ═══════════════════════════════════════════════════════════════ */
+/* ── Escritura de la carta (efecto máquina de escribir) ───────── */
 
-async function iniciarCarta() {
-  // Título
-  const titulo = document.createElement("h2");
-  titulo.id = "tituloCarta";
-  titulo.className = "carta-titulo";
-  titulo.textContent = TITULO;
-  mensajeEl.prepend(titulo);
+function iniciarCarta() {
+  tituloEl.textContent = TITULO;
 
-  // Firma (se muestra al terminar)
-  firmaEl.innerHTML = "";
-  const sign = document.createElement("span");
-  sign.textContent = FIRMA;
-  firmaEl.append(sign);
-  firmaEl.append(document.createTextNode(" "));
-  const latido = document.createElement("span");
-  latido.className = "latido";
-  latido.textContent = "♥";
-  firmaEl.append(latido);
+  firmaEl.textContent = "";
+  firmaEl.append(FIRMA, " ", crearLatido());
 
   escribirLineas();
 }
 
-async function escribirLineas() {
+function crearLatido() {
+  const s = document.createElement("span");
+  s.className = "latido";
+  s.textContent = "♥";
+  return s;
+}
+
+function escribirLineas() {
   escribiendo = true;
 
   const cursor = document.createElement("span");
@@ -207,7 +179,7 @@ async function escribirLineas() {
 
     let j = 0;
     const tick = async () => {
-      if (saltar) j = texto.length;
+      if (saltar) j = texto.length;     // un toque acelera todo
       p.textContent = texto.slice(0, j);
       p.appendChild(cursor);
       mensajeEl.scrollTop = mensajeEl.scrollHeight;
@@ -231,38 +203,64 @@ async function escribirLineas() {
 function terminar(cursor) {
   escribiendo = false;
   cursor.remove();
-  firmaEl.querySelectorAll(".latido").forEach(l => l.classList.add("visible"));
+  firmaEl.classList.add("visible");
+  // Al terminar, la carta vuelve suavemente al inicio para leerse completa
   setTimeout(() => {
     mensajeEl.scrollTo({ top: 0, behavior: reduceMov ? "auto" : "smooth" });
   }, 600);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   EVENTOS
-   ═══════════════════════════════════════════════════════════════ */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-scene.addEventListener("click", abrirCarta);
+/* ── Estallido de corazones al abrir (estilo original) ────────── */
 
-scene.addEventListener("keydown", (e) => {
+function explotarCorazones() {
+  if (reduceMov) return;
+
+  const colores = ["#ff8fb3", "#ff5d8f", "#ffb3c6", "#e63976", "#f7cad0"];
+
+  for (let k = 0; k < 12; k++) {
+    const chispa = document.createElement("span");
+    chispa.className = "chispa";
+
+    const ang  = Math.random() * Math.PI * 2;
+    const dist = 110 + Math.random() * 140;
+
+    chispa.style.setProperty("--dx", (Math.cos(ang) * dist) + "px");
+    chispa.style.setProperty("--dy", (Math.sin(ang) * dist * 0.7 - 70) + "px");
+    chispa.style.setProperty("--tam", (10 + Math.random() * 14) + "px");
+    chispa.style.setProperty("--c", colores[k % colores.length]);
+    chispa.appendChild(document.createElement("i"));
+
+    escena.appendChild(chispa);
+    setTimeout(() => chispa.remove(), 1400);
+  }
+}
+
+/* ── Eventos ──────────────────────────────────────────────────── */
+
+zonaSobre.addEventListener("click", abrirCarta);
+
+zonaSobre.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
     abrirCarta();
   }
 });
 
-letter.addEventListener("click", () => {
+// Un toque sobre la carta mientras escribe la completa al instante
+cartaEl.addEventListener("click", () => {
   if (escribiendo) saltar = true;
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   FONDO: CAMPO DE FLORES NOCTURNO — generación dinámica
-   ═══════════════════════════════════════════════════════════════ */
+/* ── FONDO: CAMPO DE FLORES NOCTURNO — generación dinámica ─────── */
 
 (function(){
   "use strict";
 
   var azar = function(min, max){ return min + Math.random() * (max - min); };
 
+  /* Perfil de cada colina (en % de la pantalla) */
   function yAtras(x){  return 58 + 7*Math.sin(x/14 + 1.2) + 3*Math.sin(x/6); }
   function yMedio(x){  return 69 + 5*Math.sin(x/11 + 3.0) + 2.5*Math.sin(x/5 + 1); }
   function yFrente(x){ return 81 + 4*Math.sin(x/9 + 0.5) + 2.0*Math.sin(x/4.2 + 2); }
@@ -279,6 +277,7 @@ letter.addEventListener("click", () => {
   trazarColina("colinaMedio",  yMedio);
   trazarColina("colinaFrente", yFrente);
 
+  /* Estrellas en el cielo alto */
   var estrellas = document.getElementById("estrellas");
   for (var i = 0; i < 95; i++){
     var e = document.createElement("span");
@@ -293,6 +292,7 @@ letter.addEventListener("click", () => {
     estrellas.appendChild(e);
   }
 
+  /* Flores: pequeñas en la colina del fondo, grandes adelante */
   var flores = document.getElementById("flores");
 
   function crearFlor(x, y, tam, opacidad){
@@ -311,13 +311,18 @@ letter.addEventListener("click", () => {
     flores.appendChild(f);
   }
 
+  /* Flores lejanas (colina media, casi en el horizonte) */
   for (var j = 0; j < 48; j++){
     var xl = azar(0, 100);
     crearFlor(xl, yMedio(xl) + azar(0.5, 2.5), azar(3, 5.5), azar(.45, .7));
   }
+
+  /* Flores del campo medio, llenando la ladera entre las dos colinas */
   for (var w = 0; w < 50; w++){
     crearFlor(azar(0, 100), azar(72.5, 80), azar(4.5, 7), azar(.55, .8));
   }
+
+  /* Flores del frente, más grandes cuanto más abajo (perspectiva) */
   for (var k = 0; k < 105; k++){
     var x = azar(0, 100);
     var borde = yFrente(x);
@@ -326,6 +331,7 @@ letter.addEventListener("click", () => {
     crearFlor(x, y, azar(6, 9) + prof * 0.75, azar(.75, 1));
   }
 
+  /* Luces flotantes (semillas de diente de león) */
   var luciernagas = document.getElementById("luciernagas");
   for (var m = 0; m < 26; m++){
     var l = document.createElement("span");
@@ -337,6 +343,7 @@ letter.addEventListener("click", () => {
     luciernagas.appendChild(l);
   }
 
+  /* Pétalos cayendo (34, colores claros que brillan en la noche) */
   var petalos = document.getElementById("petalos");
   var colores = [
     "linear-gradient(135deg,#ffffff,#ffe9f2)",
