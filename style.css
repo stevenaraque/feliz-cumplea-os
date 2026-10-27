@@ -30,7 +30,8 @@ body{
   font-family:'Lora', Georgia, 'Times New Roman', serif;
   color:#fff;
   overflow:hidden;
-  background:transparent;
+  /* Fondo oscuro de respaldo por si el campo de flores no carga */
+  background: linear-gradient(180deg, #081a36 0%, #123252 38%, #1d4a5f 66%, #2a6b62 100%);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -257,6 +258,7 @@ body{
   display:grid;
   place-items:center;
   cursor:pointer;
+  z-index:10;
 }
 .scene{
   position:relative;
