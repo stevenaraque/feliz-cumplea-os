@@ -107,20 +107,30 @@ let PAUSA_LINEA     = 400;  // pausa entre líneas
    A partir de aquí no necesitas tocar nada.
    ═══════════════════════════════════════════════════════════════ */
 
-const scene     = document.getElementById("scene");
-const flap      = document.getElementById("flap");
-const carta     = document.getElementById("carta");
-const seal      = document.getElementById("seal");
-const mensajeEl = document.getElementById("mensaje");
-const firmaEl   = document.getElementById("firma");
-const musica    = document.getElementById("musica-fondo");
-const btnMusica = document.getElementById("btn-musica");
+const scene      = document.getElementById("scene");
+const envelope   = document.getElementById("envelope");
+const flap       = document.getElementById("flap");
+const carta      = document.getElementById("carta");
+const papelCarta = carta.querySelector(".carta-papel");
+const cerrarBtn  = document.getElementById("cerrarCarta");
+const pistaCarta = document.getElementById("pistaCarta");
+const seal       = document.getElementById("seal");
+const mensajeEl  = document.getElementById("mensaje");
+const firmaEl    = document.getElementById("firma");
+const musica     = document.getElementById("musica-fondo");
+const btnMusica  = document.getElementById("btn-musica");
 
 let ocupada     = false;
 let estado      = "sellado";   // sellado | abriendo | abierto | cerrando
+let escribiendo = false;
+let escrituraToken = 0;
 
 const reduceMov = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (reduceMov) { VELOCIDAD_TECLA = 8; PAUSA_LINEA = 100; }
+
+// En modo "reducir movimiento" también acortamos la secuencia de apertura,
+// para no hacer esperar una animación que ya no se está viendo.
+const RITMO = reduceMov ? 0.22 : 1;
 
 const LINEAS = [SALUDO, ...MENSAJE, DESPEDIDA];
 
@@ -130,43 +140,56 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
    APERTURA DEL SOBRE (secuencia del nuevo murciélago)
    ═══════════════════════════════════════════════════════════════ */
 
+function actualizarBotonMusica() {
+  if (!btnMusica || !musica) return;
+  const activa = !musica.paused;
+  btnMusica.setAttribute("aria-pressed", String(activa));
+  btnMusica.setAttribute("aria-label", activa ? "Desactivar música" : "Activar música");
+  btnMusica.title = activa ? "Desactivar música" : "Activar música";
+}
+
 function reproducirMusica() {
   if (!musica) return;
-  musica.play().catch(() => {
+  musica.play().then(actualizarBotonMusica).catch(() => {
     // Navegador bloqueó autoplay; se activará en la próxima interacción del usuario
+    actualizarBotonMusica();
   });
 }
 
 async function abrirCarta() {
   if (ocupada || estado !== "sellado") return;
   ocupada = true; estado = "abriendo";
+  envelope.setAttribute("aria-expanded", "true");
 
   // Activar música en la primera interacción del usuario
   reproducirMusica();
 
   // 1) La cera se resquebraja: migas caen, murciélaguecillos huyen
   seal.classList.add("crack");
-  await sleep(520);
+  await sleep(520 * RITMO);
 
   // 2) La solapa gira en 3D con rebote de papel
   flap.classList.add("open");
   scene.classList.add("flap-open");
-  await sleep(500);                   // mitad del giro…
-  flap.classList.add("behind");       // …pasa detrás del sobre
-  await sleep(880);
+  await sleep(500 * RITMO);             // mitad del giro…
+  flap.classList.add("behind");         // …pasa detrás del sobre
+  await sleep(880 * RITMO);
 
   // 3) El interior despierta: aurora, labio de luz y motas
   scene.classList.add("is-open");
-  await sleep(800);
+  await sleep(800 * RITMO);
 
   // 4) La carta emerge como card grande
   carta.classList.add("rise");
-  await sleep(1020);
+  await sleep(1020 * RITMO);
   carta.classList.add("free");
-  await sleep(950);
+  carta.setAttribute("aria-hidden", "false");
+  document.body.classList.add("carta-abierta");
+  await sleep(950 * RITMO);
 
   estado = "abierto"; ocupada = false;
   iniciarCarta();
+  if (cerrarBtn) cerrarBtn.focus({ preventScroll: true });
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -177,22 +200,28 @@ async function cerrarCarta() {
   if (ocupada || estado !== "abierto") return;
   ocupada = true; estado = "cerrando";
 
+  detenerEscritura();
+  ocultarPista();
+  document.body.classList.remove("carta-abierta");
+  carta.setAttribute("aria-hidden", "true");
   carta.classList.remove("free");
-  await sleep(920);
+  await sleep(920 * RITMO);
   scene.classList.remove("is-open");  // la luz se apaga
   carta.classList.remove("rise");     // la carta se guarda
-  await sleep(1100);
+  await sleep(1100 * RITMO);
 
   scene.classList.remove("flap-open");
   flap.classList.remove("open");      // la solapa vuelve a cerrarse
-  await sleep(500);
+  await sleep(500 * RITMO);
   flap.classList.remove("behind");
-  await sleep(950);
+  await sleep(950 * RITMO);
 
   seal.classList.remove("crack");     // la cera se restaura sola
-  await sleep(700);
+  await sleep(700 * RITMO);
 
   estado = "sellado"; ocupada = false;
+  envelope.setAttribute("aria-expanded", "false");
+  envelope.focus({ preventScroll: true });
 }
 
 function alternar(){
@@ -204,15 +233,32 @@ function alternar(){
    ESCRITURA DE LA CARTA (efecto máquina de escribir)
    ═══════════════════════════════════════════════════════════════ */
 
+function mostrarPista() {
+  if (pistaCarta) pistaCarta.classList.remove("oculta");
+}
+
+function ocultarPista() {
+  if (pistaCarta) pistaCarta.classList.add("oculta");
+}
+
+function detenerEscritura() {
+  escrituraToken++;
+  escribiendo = false;
+}
+
 async function iniciarCarta() {
   // Título
   const titulo = document.getElementById("tituloCarta");
   if (titulo) titulo.textContent = TITULO;
 
-  // Firma (se muestra al terminar)
+  // Limpiar por si la carta se cerró y se volvió a abrir
+  mensajeEl.innerHTML = "";
   firmaEl.textContent = "";
   firmaEl.append(FIRMA, " ", crearLatido());
+  firmaEl.classList.remove("visible");
+  if (papelCarta) papelCarta.scrollTop = 0;
 
+  mostrarPista();
   escribirLineas();
 }
 
@@ -223,7 +269,28 @@ function crearLatido() {
   return s;
 }
 
+/* Convierte el enlace de YouTube en un enlace legible y clickeable. */
+function enlazarUrls() {
+  if (!mensajeEl) return;
+  mensajeEl.querySelectorAll("p").forEach((p) => {
+    const texto = p.textContent.trim();
+    if (!/^https?:\/\/\S+$/.test(texto)) return;
+
+    p.className = "cancion-contenedor";
+    const enlace = document.createElement("a");
+    enlace.href = texto;
+    enlace.target = "_blank";
+    enlace.rel = "noopener noreferrer";
+    enlace.className = "enlace-cancion";
+    enlace.innerHTML = '<span class="icono-enlace">♫</span> <span class="texto-enlace">Escuchar nuestra canción (Darviin)</span>';
+
+    p.textContent = "";
+    p.appendChild(enlace);
+  });
+}
+
 async function escribirLineas() {
+  const token = ++escrituraToken;
   escribiendo = true;
 
   const cursor = document.createElement("span");
@@ -232,7 +299,8 @@ async function escribirLineas() {
   let i = 0;
 
   const siguiente = async () => {
-    if (i >= LINEAS.length) { terminar(cursor); return; }
+    if (token !== escrituraToken) return;
+    if (i >= LINEAS.length) { terminar(cursor, token); return; }
 
     const texto = LINEAS[i];
     const p = document.createElement("p");
@@ -244,23 +312,54 @@ async function escribirLineas() {
       return;
     }
 
+    // Si es enlace URL (ej. la canción de YouTube), lo agregamos directo con estilo
+    if (/^https?:\/\/\S+$/.test(texto.trim())) {
+      p.className = "cancion-contenedor";
+      const enlace = document.createElement("a");
+      enlace.href = texto.trim();
+      enlace.target = "_blank";
+      enlace.rel = "noopener noreferrer";
+      enlace.className = "enlace-cancion";
+      enlace.innerHTML = '<span class="icono-enlace">♫</span> <span class="texto-enlace">Escuchar nuestra canción (Darviin)</span>';
+      p.appendChild(enlace);
+      mensajeEl.appendChild(p);
+
+      if (papelCarta) papelCarta.scrollTop = papelCarta.scrollHeight;
+
+      i++;
+      await sleep(PAUSA_LINEA + 200);
+      if (token !== escrituraToken) return;
+      siguiente();
+      return;
+    }
+
     if (i === LINEAS.length - 1) p.classList.add("ultimo");
     mensajeEl.appendChild(p);
 
     let j = 0;
     const tick = async () => {
-      if (saltar) j = texto.length;
+      if (token !== escrituraToken) return;
+
       p.textContent = texto.slice(0, j);
       p.appendChild(cursor);
-      mensajeEl.scrollTop = mensajeEl.scrollHeight;
+
+      // Solo sigue el scroll si la persona está leyendo cerca del final;
+      // si subió a releer algo, no se lo arrebatamos.
+      if (papelCarta) {
+        const cercaDelFondo =
+          papelCarta.scrollHeight - papelCarta.scrollTop - papelCarta.clientHeight < 80;
+        if (cercaDelFondo) papelCarta.scrollTop = papelCarta.scrollHeight;
+      }
 
       if (j < texto.length) {
         j++;
         await sleep(VELOCIDAD_TECLA + Math.random() * 40);
+        if (token !== escrituraToken) return;
         tick();
       } else {
         i++;
         await sleep(PAUSA_LINEA);
+        if (token !== escrituraToken) return;
         siguiente();
       }
     };
@@ -270,17 +369,52 @@ async function escribirLineas() {
   siguiente();
 }
 
-let escribiendo = false;
-let saltar = false;
-
-function terminar(cursor) {
+function terminar(cursor, token) {
+  if (token !== escrituraToken) return;
   escribiendo = false;
   cursor.remove();
   firmaEl.classList.add("visible");
-  // Al terminar, la carta vuelve suavemente al inicio para leerse completa
-  setTimeout(() => {
-    mensajeEl.scrollTo({ top: 0, behavior: reduceMov ? "auto" : "smooth" });
-  }, 600);
+  ocultarPista();
+  enlazarUrls();
+}
+
+/* Si se toca la carta mientras escribe, se muestra completa al instante. */
+function completarCarta() {
+  if (!escribiendo) return;
+
+  escrituraToken++;
+  escribiendo = false;
+  mensajeEl.innerHTML = "";
+
+  LINEAS.forEach((texto, i) => {
+    const p = document.createElement("p");
+    if (texto.trim() === "") {
+      mensajeEl.appendChild(p);
+      return;
+    }
+
+    if (/^https?:\/\/\S+$/.test(texto.trim())) {
+      p.className = "cancion-contenedor";
+      const enlace = document.createElement("a");
+      enlace.href = texto.trim();
+      enlace.target = "_blank";
+      enlace.rel = "noopener noreferrer";
+      enlace.className = "enlace-cancion";
+      enlace.innerHTML = '<span class="icono-enlace">♫</span> <span class="texto-enlace">Escuchar nuestra canción (Darviin)</span>';
+      p.appendChild(enlace);
+      mensajeEl.appendChild(p);
+      return;
+    }
+
+    if (i === LINEAS.length - 1) p.classList.add("ultimo");
+    p.textContent = texto;
+    mensajeEl.appendChild(p);
+  });
+
+  firmaEl.classList.add("visible");
+  ocultarPista();
+  enlazarUrls();
+  if (papelCarta) papelCarta.scrollTop = 0;
 }
 
 /* ── Estallido de corazones al abrir (estilo original, opcional) ── */
@@ -310,37 +444,54 @@ function explotarCorazones() {
 
 /* ── Eventos ──────────────────────────────────────────────────── */
 
-scene.addEventListener("click", alternar);
-
-scene.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    alternar();
-  }
+scene.addEventListener("click", (e) => {
+  // La carta y el botón de música manejan sus propios clics.
+  if (e.target.closest("#btn-musica, .carta")) return;
+  alternar();
 });
 
-// Un toque sobre la carta mientras escribe la completa al instante
-carta.addEventListener("click", () => {
-  if (escribiendo) saltar = true;
+scene.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  if (e.target.closest(".carta, #btn-musica")) return;
+  e.preventDefault();
+  alternar();
+});
+
+// Un toque dentro de la carta completa la escritura, pero ya no la cierra.
+carta.addEventListener("click", (e) => {
+  if (!carta.classList.contains("free")) return;
+  if (e.target.closest("a, button")) return;
+  if (escribiendo) completarCarta();
+});
+
+if (cerrarBtn) {
+  cerrarBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    cerrarCarta();
+  });
+}
+
+// Escape cierra la carta abierta.
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && estado === "abierto") {
+    e.preventDefault();
+    cerrarCarta();
+  }
 });
 
 // Botón de control de música (activa / pausa)
 if (btnMusica && musica) {
-  let musicaActiva = false;
-
   btnMusica.addEventListener("click", (e) => {
     e.stopPropagation(); // no disparar clic del sobre
     if (musica.paused) {
-      musica.play().then(() => {
-        musicaActiva = true;
-        btnMusica.setAttribute("aria-pressed", "true");
-      });
+      musica.play().catch(() => {});
     } else {
       musica.pause();
-      musicaActiva = false;
-      btnMusica.setAttribute("aria-pressed", "false");
     }
   });
+
+  musica.addEventListener("play", actualizarBotonMusica);
+  musica.addEventListener("pause", actualizarBotonMusica);
 }
 
 // Intento de autoplay al cargar la página (navegadores pueden bloquearlo)
@@ -348,6 +499,7 @@ window.addEventListener("load", () => {
   if (musica) {
     musica.play().catch(() => {
       // Bloqueado por el navegador; se activará con la primera interacción
+      actualizarBotonMusica();
     });
   }
 });
@@ -444,25 +596,37 @@ window.addEventListener("load", () => {
 
   /* Pétalos cayendo en toda la página */
   var petalos = document.getElementById("petalos");
-  var colores = [
-    "linear-gradient(135deg,#ffffff,#ffe9f2)",
-    "linear-gradient(135deg,#ffe4ee,#f9a8c2)",
-    "linear-gradient(135deg,#fff6e8,#ffd9a8)",
-    "linear-gradient(135deg,#fde2ef,#e88fb2)",
-    "linear-gradient(135deg,#f2fbff,#cfe9ff)"
-  ];
-  var totalPetalos = window.innerWidth > 768 ? 60 : 34; /* más en escritorio */
-  for (var p = 0; p < totalPetalos; p++){
-    var pe = document.createElement("span");
-    pe.className = "petalo";
-    pe.style.setProperty("--x", azar(-10, 110) + "%");   /* cubre todo el ancho */
-    pe.style.setProperty("--tam", azar(12, 24) + "px");  /* un poco más grandes en escritorio */
-    pe.style.setProperty("--dur", azar(10, 18) + "s");   /* caída más lenta y variada */
-    pe.style.setProperty("--delay", -azar(0, 20) + "s");
-    var hoja = document.createElement("i");
-    hoja.style.background = colores[p % colores.length];
-    hoja.style.setProperty("--gir", azar(2.2, 4) + "s");
-    pe.appendChild(hoja);
-    petalos.appendChild(pe);
+  if (petalos) {
+    var colores = [
+      "linear-gradient(135deg, #ff9ebb 0%, #ff6b8b 100%)",
+      "linear-gradient(135deg, #ffa8c5 0%, #f77fbe 100%)",
+      "linear-gradient(135deg, #ffd3dd 0%, #ff758f 100%)",
+      "linear-gradient(135deg, #ffb3c1 0%, #fb6f92 100%)",
+      "linear-gradient(135deg, #ff758c 0%, #e04368 100%)",
+      "linear-gradient(135deg, #ffeef2 0%, #ff85a1 100%)"
+    ];
+    var ancho = window.innerWidth || document.documentElement.clientWidth || 1200;
+    var totalPetalos = ancho > 1200 ? 55 : (ancho > 768 ? 42 : 28);
+    var escalaPetalo = Math.min(1.4, Math.max(0.95, ancho / 1200));
+
+    petalos.innerHTML = "";
+    for (var p = 0; p < totalPetalos; p++){
+      var pe = document.createElement("span");
+      pe.className = "petalo";
+      var tamBase = azar(16, 28) * escalaPetalo;
+      pe.style.setProperty("--x", azar(-4, 104).toFixed(2) + "%");
+      pe.style.setProperty("--tam", tamBase.toFixed(1) + "px");
+      pe.style.setProperty("--dur", azar(9, 16).toFixed(1) + "s");
+      pe.style.setProperty("--delay", (-azar(0, 16)).toFixed(1) + "s");
+      pe.style.setProperty("--drift", azar(-6, 8).toFixed(1) + "vw");
+      pe.style.setProperty("--rot-end", azar(180, 420).toFixed(0) + "deg");
+
+      var hoja = document.createElement("i");
+      hoja.style.background = colores[p % colores.length];
+      hoja.style.setProperty("--gir", azar(2.5, 4.5).toFixed(1) + "s");
+      hoja.style.setProperty("--rot-ini", azar(-30, 30).toFixed(1) + "deg");
+      pe.appendChild(hoja);
+      petalos.appendChild(pe);
+    }
   }
 })();

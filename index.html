@@ -33,16 +33,16 @@
     <svg class="colinas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="gAtras" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#245049"/>
-          <stop offset="1" stop-color="#0f2a26"/>
+          <stop offset="0" stop-color="#142846"/>
+          <stop offset="1" stop-color="#0a1527"/>
         </linearGradient>
         <linearGradient id="gMedio" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#2f6e52"/>
-          <stop offset="1" stop-color="#15382b"/>
+          <stop offset="0" stop-color="#1a355c"/>
+          <stop offset="1" stop-color="#0d1c32"/>
         </linearGradient>
         <linearGradient id="gFrente" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#4a9e6b"/>
-          <stop offset="1" stop-color="#1b4531"/>
+          <stop offset="0" stop-color="#1e3f6d"/>
+          <stop offset="1" stop-color="#10223d"/>
         </linearGradient>
       </defs>
       <path id="colinaAtras" fill="url(#gAtras)"/>
@@ -76,7 +76,8 @@
       <div class="lift">
         <div class="floaty">
           <div class="envelope" id="envelope" role="button" tabindex="0"
-               aria-label="Sobre sellado con un murciélago. Pulsa para romper el sello y abrir la carta.">
+               aria-label="Sobre sellado con un murciélago. Pulsa para romper el sello y abrir la carta."
+               aria-expanded="false" aria-controls="carta">
 
             <!-- 0 · aurora mágica sobre la boca (visible al abrir) -->
             <div class="env-glow"></div>
@@ -96,12 +97,14 @@
             </div>
 
             <!-- 2 · LA CARTA ORIGINAL (opaca, tema morado/rosa) que sale del sobre -->
-            <div class="carta" id="carta">
+            <div class="carta" id="carta" role="dialog" aria-labelledby="tituloCarta" aria-hidden="true">
+              <button class="carta-cerrar" id="cerrarCarta" type="button" aria-label="Cerrar la carta">×</button>
               <div class="carta-papel">
                 <h2 class="carta-titulo" id="tituloCarta">Para Naydú</h2>
                 <div class="mensaje" id="mensaje"></div>
                 <p class="firma" id="firma"></p>
               </div>
+              <div class="pista" id="pistaCarta" aria-hidden="true">Toca la carta para verla completa</div>
             </div>
 
             <!-- 3 · frente del sobre: solapas plegadas + monograma -->
@@ -167,7 +170,12 @@
 
   <!-- Botón para activar/desactivar la música -->
   <button id="btn-musica" aria-label="Activar/desactivar música" title="Música" aria-pressed="false">
-    <span aria-hidden="true">♪</span>
+    <div class="musica-ecualizador" aria-hidden="true">
+      <span class="bar b1"></span>
+      <span class="bar b2"></span>
+      <span class="bar b3"></span>
+    </div>
+    <span class="musica-nota" aria-hidden="true">♪</span>
   </button>
 
   <noscript>

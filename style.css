@@ -32,7 +32,7 @@ body{
   font-family:'Lora', Georgia, 'Times New Roman', serif;
   color:#fff;
   overflow:hidden;
-  background: linear-gradient(180deg, #081a36 0%, #123252 38%, #1d4a5f 66%, #2a6b62 100%);
+  background: linear-gradient(180deg, #071326 0%, #0d223f 38%, #143354 66%, #1b3d5b 100%);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -133,7 +133,7 @@ body{
   position:absolute; top:100%; left:50%;
   width:2px; height:var(--tal, 12px);
   margin-left:-1px;
-  background: linear-gradient(180deg, #2f7a50, #143726);
+  background: linear-gradient(180deg, #2b4c6a, #132433);
   border-radius:2px;
 }
 .cabeza{
@@ -178,39 +178,41 @@ body{
 #petalos{
   position:fixed;               /* cubre toda la pantalla, independiente del padre */
   inset:0;
-  z-index:9999;                 /* por encima de todo */
+  z-index:12;                   /* visible sobre el fondo y sobre cerrado, pero detrás de la carta abierta */
   pointer-events:none;
+  overflow:hidden;
 }
 
 .petalo{
-  position:absolute; z-index:9999;
-  top:-10vh; left:var(--x, 50%); /* nazcan desde arriba de la pantalla */
-  width:var(--tam, 16px); height:calc(var(--tam, 16px) * .72);
-  perspective: 130px;
+  position:absolute;
+  top:-35px;
+  left:var(--x, 50%);
+  width:var(--tam, 20px);
+  height:calc(var(--tam, 20px) * .78);
   pointer-events:none;
   animation: caerPetalo var(--dur, 12s) linear var(--delay, 0s) infinite;
   will-change: transform, opacity;
 }
 .petalo i{
-  display:block; width:100%; height:100%;
-  border-radius: 100% 6% 100% 6%;
-  box-shadow: 0 0 9px rgba(255,215,235,.55), inset 0 0 3px rgba(255,255,255,.7);
-  animation: girarPetalo var(--gir, 3s) linear var(--delay, 0s) infinite;
+  display:block;
+  width:100%;
+  height:100%;
+  border-radius: 65% 10% 65% 10% / 60% 15% 60% 15%;
+  box-shadow: 0 2px 8px rgba(255,100,150,.45), inset 0 0 4px rgba(255,255,255,.75);
+  animation: mecerPetalo var(--gir, 3.2s) ease-in-out var(--delay, 0s) infinite alternate;
+  transform-origin: center center;
   will-change: transform;
 }
 @keyframes caerPetalo{
-  0%  { transform: translate(0, 0);        opacity:0; }
-  7%  { opacity:1; }
-  25% { transform: translate(4.5vw, 26vh); opacity:1; }
-  50% { transform: translate(-3.5vw, 52vh); }
-  75% { transform: translate(3.8vw, 78vh); }
-  92% { opacity:1; }
-  100%{ transform: translate(-2vw, 112vh); opacity:0; }
+  0%  { transform: translate3d(0, 0, 0) rotate(0deg); opacity:0; }
+  8%  { opacity:.96; }
+  88% { opacity:.96; }
+  100%{ transform: translate3d(var(--drift, 4vw), 110vh, 0) rotate(var(--rot-end, 280deg)); opacity:0; }
 }
-@keyframes girarPetalo{
-  from{ transform: rotate(0deg)   rotateY(0deg); }
-  50% { transform: rotate(180deg) rotateY(180deg); }
-  to  { transform: rotate(360deg) rotateY(360deg); }
+@keyframes mecerPetalo{
+  0%  { transform: rotate(var(--rot-ini, -15deg)) rotateY(0deg) scale(1); }
+  50% { transform: rotate(calc(var(--rot-ini, -15deg) + 22deg)) rotateY(55deg) scale(.92); }
+  100%{ transform: rotate(calc(var(--rot-ini, -15deg) - 20deg)) rotateY(15deg) scale(1); }
 }
 
 .luz{
@@ -496,44 +498,98 @@ body{
 .carta.free{
   position:fixed;
   left:50%; top:50%;
-  width:min(90vw, 640px);
-  height:min(90vh, 760px);
+  width:min(92vw, 680px);
+  height:min(88vh, 780px);
+  height:min(88svh, 780px);
   transform:translate(-50%, -50%) scale(1);
-  z-index:20;
+  z-index:30;
   pointer-events:auto;
   clip-path:inset(0);
-  transition:transform 1s cubic-bezier(.2,.85,.25,1);
+  transition:transform .85s cubic-bezier(.2,.85,.25,1);
   background: var(--papel);
-  border-radius:14px;
+  border-radius:18px;
   overflow:hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  box-shadow: 0 25px 70px rgba(7,14,30,.55), 0 0 0 1px rgba(255,255,255,.25);
 }
 
-/* Hoja de la carta - también opaca */
+/* Botón para cerrar la carta */
+.carta-cerrar{
+  position:absolute; top:14px; right:14px; z-index:10;
+  width:42px; height:42px;
+  border:1px solid rgba(164,19,60,.25);
+  border-radius:50%;
+  background:rgba(255,247,236,.94);
+  backdrop-filter:blur(4px);
+  color:var(--rosa-fuerte);
+  font:700 24px/1 'Lora', Georgia, serif;
+  display:none; place-items:center;
+  cursor:pointer;
+  box-shadow:0 3px 12px rgba(90,40,60,.18);
+  transition:background .2s ease, transform .2s ease;
+}
+.carta.free .carta-cerrar{ display:grid; }
+.carta-cerrar:hover{ background:#fff; transform:scale(1.06); }
+.carta-cerrar:active{ transform:scale(.94); }
+.carta-cerrar:focus-visible{
+  outline:2px solid var(--rosa-fuerte);
+  outline-offset:2px;
+}
+
+/* Pista para saltar la escritura (solo mientras escribe) */
+.pista{
+  position:absolute; left:50%; bottom:14px;
+  transform:translateX(-50%);
+  z-index:6;
+  padding:7px 14px;
+  border-radius:999px;
+  background:rgba(91,58,78,.92);
+  color:#fff7ec;
+  font-size:.76rem;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  box-shadow:0 4px 14px rgba(40,20,30,.22);
+  pointer-events:none;
+  opacity:1;
+  transition:opacity .35s ease;
+}
+.pista.oculta{ opacity:0; }
+.carta:not(.free) .pista{ opacity:0; }
+
+/* Hoja de la carta - textura pergamino de lujo */
 .carta-papel{
   width:100%; height:100%;
   display:flex; flex-direction:column;
   background:
-    radial-gradient(120% 90% at 20% 0%, rgba(255,214,180,.55), transparent 55%),
-    repeating-linear-gradient(0deg, transparent 0 30px, rgba(180,110,140,.10) 30px 31px),
-    var(--papel);
-  border-radius:14px;
-  box-shadow: inset 0 0 40px rgba(190,120,140,.10);
-  padding: clamp(24px, 6vw, 56px) clamp(24px, 6vw, 64px) clamp(30px, 7vw, 60px);
+    radial-gradient(120% 90% at 15% 10%, rgba(255,225,200,.6), transparent 60%),
+    radial-gradient(100% 80% at 85% 90%, rgba(245,210,225,.4), transparent 55%),
+    linear-gradient(180deg, #fffcf7 0%, var(--papel) 100%);
+  border-radius:18px;
+  box-shadow:
+    inset 0 0 35px rgba(164,19,60,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  padding: clamp(22px, 5vw, 48px) clamp(20px, 5.5vw, 56px) clamp(28px, 6vw, 52px);
   color: var(--tinta);
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
 }
+.carta-papel::-webkit-scrollbar{ width:8px; }
+.carta-papel::-webkit-scrollbar-track{ background:transparent; }
+.carta-papel::-webkit-scrollbar-thumb{
+  background:rgba(164,19,60,.28);
+  border-radius:8px;
+}
+.carta-papel::-webkit-scrollbar-thumb:hover{
+  background:rgba(164,19,60,.45);
+}
 
-/* Efecto bordes quemados/sombreados para dar profundidad */
+/* Efecto suave de halo cálido/rosado artesanal */
 .carta-papel::before{
   content:"";
   position:absolute; inset:0;
-  border-radius:14px;
-  background:radial-gradient(circle at 50% 50%, transparent 55%, rgba(40,20,10,.45) 95%);
+  border-radius:18px;
+  background:radial-gradient(circle at 50% 50%, transparent 68%, rgba(164,19,60,.06) 92%, rgba(91,58,78,.15) 100%);
   pointer-events:none;
-  mix-blend-mode:multiply;
 }
 
 .carta-titulo{
@@ -570,6 +626,55 @@ body{
   margin:.6em 0;
   min-height:1.9em;
   text-align:left;
+  overflow-wrap:anywhere;
+}
+.mensaje a{
+  color:var(--rosa-fuerte);
+  text-decoration:none;
+  border-bottom:1px solid rgba(164,19,60,.35);
+  transition:border-color .2s ease, color .2s ease;
+}
+.mensaje a:hover,
+.mensaje a:focus-visible{
+  color:#7d0f2e;
+  border-bottom-color:#7d0f2e;
+}
+.mensaje a:focus-visible{
+  outline:2px solid rgba(164,19,60,.5);
+  outline-offset:3px;
+  border-radius:2px;
+}
+.cancion-contenedor{
+  margin: 16px 0 !important;
+  text-align: center !important;
+}
+.enlace-cancion{
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 26px !important;
+  background: linear-gradient(135deg, rgba(164,19,60,.12), rgba(255,117,140,.20)) !important;
+  border: 1.5px solid rgba(164,19,60,.4) !important;
+  border-radius: 999px !important;
+  color: var(--rosa-fuerte) !important;
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+  font-weight: 500;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px rgba(164,19,60,.12);
+  transition: all .25s ease !important;
+  cursor: pointer;
+}
+.enlace-cancion:hover{
+  background: linear-gradient(135deg, var(--rosa-fuerte), #c9184a) !important;
+  color: #fff !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(164,19,60,.3);
+}
+.enlace-cancion .icono-enlace{
+  font-size: 1.25em;
+  line-height: 1;
 }
 .mensaje p:first-child{
   font-family:'Dancing Script', cursive;
@@ -613,7 +718,7 @@ body{
   transition: opacity .9s ease .15s, transform .9s ease .15s;
   position:relative; z-index:2;
 }
-.firma .latido.visible{ opacity:1; transform:none; }
+.firma.visible{ opacity:1; transform:none; }
 .firma .latido{
   display:inline-block;
   color:#c0233e;
@@ -817,33 +922,82 @@ body{
 
 #btn-musica{
   position:fixed;
-  top:14px;
-  right:14px;
-  width:44px; height:44px;
-  border:none;
+  top:16px;
+  right:16px;
+  width:46px; height:46px;
+  border:1px solid rgba(255,255,255,.22);
   border-radius:50%;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(6px);
+  background:rgba(18, 30, 54, 0.65);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
   color:#fff;
-  font-size:20px;
   cursor:pointer;
-  z-index:100;
+  z-index:50;
   display:grid; place-items:center;
-  transition:background .2s ease, transform .2s ease;
-  box-shadow:0 4px 12px rgba(0,0,0,.35);
+  transition:all .25s ease;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
 }
 #btn-musica:hover{
-  background:rgba(255,255,255,.25);
-  transform:scale(1.05);
+  background:rgba(28, 44, 76, 0.85);
+  transform:scale(1.06);
+  border-color:rgba(255,255,255,.4);
 }
-#btn-musica:active{ transform:scale(.95); }
+#btn-musica:active{ transform:scale(.94); }
 #btn-musica[aria-pressed="true"]{
-  background:rgba(164,19,60,.25);
-  color:#ffd3e0;
+  background:rgba(164,19,60,.45);
+  border-color:rgba(255,183,205,.6);
+  box-shadow:0 0 16px rgba(255,105,180,.4);
 }
 #btn-musica:focus-visible{
-  outline:2px dashed rgba(255,183,205,.85);
-  outline-offset:2px;
+  outline:2px dashed rgba(255,183,205,.9);
+  outline-offset:3px;
+}
+
+.musica-ecualizador{
+  display:none;
+  align-items:flex-end;
+  gap:2.5px;
+  height:16px;
+}
+.musica-ecualizador .bar{
+  width:3px;
+  background:#ffd3e0;
+  border-radius:2px;
+  animation:ecualizar 1s ease-in-out infinite alternate;
+}
+.musica-ecualizador .b1{ height:8px; animation-duration:.8s; }
+.musica-ecualizador .b2{ height:16px; animation-duration:.55s; animation-delay:.15s; }
+.musica-ecualizador .b3{ height:11px; animation-duration:.75s; animation-delay:.35s; }
+
+@keyframes ecualizar{
+  0%{ height:4px; }
+  100%{ height:16px; }
+}
+
+#btn-musica[aria-pressed="true"] .musica-ecualizador{ display:flex; }
+#btn-musica[aria-pressed="true"] .musica-nota{ display:none; }
+#btn-musica[aria-pressed="false"] .musica-ecualizador{ display:none; }
+#btn-musica[aria-pressed="false"] .musica-nota{ display:block; font-size:18px; }
+
+/* En móvil, situar el botón de música a la izquierda para nunca colisionar con cerrar carta */
+@media (max-width:600px){
+  #btn-musica{
+    top:14px;
+    left:14px;
+    right:auto;
+  }
+}
+
+/* Pausar fondo cuando la carta está abierta (optimización de batería y rendimiento) */
+body.carta-abierta .estrella,
+body.carta-abierta .flor,
+body.carta-abierta .nube,
+body.carta-abierta .luz{
+  animation-play-state: paused !important;
+}
+body.carta-abierta .fondo-campo{
+  opacity: 0.35;
+  transition: opacity .8s ease;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -855,11 +1009,21 @@ body{
 @media (max-width:380px),(max-height:460px){.scene{--s:.62}}
 
 @media (prefers-reduced-motion:reduce){
-  .luna, .estrella, .nube, .niebla, #flores, .flor, .petalo, .luz,
+  .luna, .estrella, .nube, .niebla, #flores, .flor, .luz,
   .floaty, .seal, .floor-shadow, .flybat, .seal::before, .lift,
   .carta.rise .carta-papel, .carta.free .carta-papel, .resplandor{
     animation: none !important;
   }
+
+  /* Los pétalos caen suavemente siempre para conservar la magia del regalo en PC y móvil */
+  .petalo{
+    animation: caerPetalo var(--dur, 14s) linear var(--delay, 0s) infinite !important;
+    opacity: .95;
+  }
+  .petalo i{
+    animation: mecerPetalo var(--gir, 4s) ease-in-out var(--delay, 0s) infinite alternate !important;
+  }
+
   .flap, .seal, .carta{
     transition-duration:.2s !important;
     transition-delay:0s !important;
