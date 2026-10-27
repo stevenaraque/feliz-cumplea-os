@@ -451,13 +451,13 @@ window.addEventListener("load", () => {
     "linear-gradient(135deg,#fde2ef,#e88fb2)",
     "linear-gradient(135deg,#f2fbff,#cfe9ff)"
   ];
-  var totalPetalos = window.innerWidth > 768 ? 52 : 34; /* más en escritorio */
+  var totalPetalos = window.innerWidth > 768 ? 60 : 34; /* más en escritorio */
   for (var p = 0; p < totalPetalos; p++){
     var pe = document.createElement("span");
     pe.className = "petalo";
-    pe.style.setProperty("--x", azar(-8, 108) + "%");   /* cubre todo el ancho */
-    pe.style.setProperty("--tam", azar(11, 21) + "px");
-    pe.style.setProperty("--dur", azar(10, 18) + "s");  /* caída más lenta y variada */
+    pe.style.setProperty("--x", azar(-10, 110) + "%");   /* cubre todo el ancho */
+    pe.style.setProperty("--tam", azar(12, 24) + "px");  /* un poco más grandes en escritorio */
+    pe.style.setProperty("--dur", azar(10, 18) + "s");   /* caída más lenta y variada */
     pe.style.setProperty("--delay", -azar(0, 20) + "s");
     var hoja = document.createElement("i");
     hoja.style.background = colores[p % colores.length];

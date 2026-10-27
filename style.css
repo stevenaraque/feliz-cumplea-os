@@ -176,15 +176,15 @@ body{
 }
 
 #petalos{
-  position:fixed;               /* cubre toda la pantalla */
+  position:fixed;               /* cubre toda la pantalla, independiente del padre */
   inset:0;
-  z-index:10;
+  z-index:9999;                 /* por encima de todo */
   pointer-events:none;
 }
 
 .petalo{
-  position:absolute; z-index:8;
-  top:-8vh; left:var(--x, 50%); /* nazcan desde arriba de la pantalla */
+  position:absolute; z-index:9999;
+  top:-10vh; left:var(--x, 50%); /* nazcan desde arriba de la pantalla */
   width:var(--tam, 16px); height:calc(var(--tam, 16px) * .72);
   perspective: 130px;
   pointer-events:none;
