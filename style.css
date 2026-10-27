@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — Fondo campo de flores + sobre murciélago
-   Carta original (tema morado/rosa) como card grande que sale del sobre
+   Carta original (tema morado/rosa) 100% opaca como card grande
    CSS puro, sin frameworks
    ═══════════════════════════════════════════════════════════════ */
 
@@ -16,13 +16,12 @@
   --radio: 12px;
 
   /* Murciélago */
-  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-  --tinta-m: #3a3350;
-  --cera1:#8a6fb8;
-  --cera2:#5b4386;
-  --cera3:#3c2a63;
-  --cera4:#241646;
-  --cera5:#150b30;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  --wax1:#9a7ec9;
+  --wax2:#6b4f9e;
+  --wax3:#453070;
+  --wax4:#2a1854;
+  --wax5:#170c33;
 }
 
 *{ margin:0; padding:0; box-sizing:border-box; }
@@ -41,7 +40,7 @@ body{
 ::selection{ background:#e63976; color:#fff; }
 
 /* ═══════════════════════════════════════════════════════════════
-   FONDO: CAMPO DE FLORES NOCTURNO
+   FONDO: CAMPO DE FLORES NOCTURNO (siempre visible detrás de todo)
    ═══════════════════════════════════════════════════════════════ */
 
 .vigneta{
@@ -239,7 +238,7 @@ body{
 @keyframes latirBrillo{ from{ opacity:.55; } to{ opacity:1; } }
 
 /* ═══════════════════════════════════════════════════════════════
-   ESCENARIO Y SOBRE MURCIÉLAGO
+   ESCENARIO Y SOBRE MURCIÉLAGO (nueva animación)
    ═══════════════════════════════════════════════════════════════ */
 
 .stage{
@@ -259,34 +258,36 @@ body{
   transform:scale(var(--s,1));
 }
 
-/* Sombra en el suelo */
+/* Sombra de contacto en el suelo */
 .floor-shadow{
-  position:absolute; left:50%; top:106px;
-  width:272px; height:34px;
+  position:absolute; left:50%; top:222px;
+  width:290px; height:40px;
   transform:translateX(-50%);
-  background:radial-gradient(ellipse at 50% 50%, rgba(20,12,38,.32) 0%, rgba(20,12,38,0) 66%);
-  filter:blur(7px);
-  opacity:.85; z-index:0;
-  animation:sombra 4.6s ease-in-out 2s infinite;
+  background:
+    radial-gradient(ellipse 46% 42% at 50% 50%, rgba(18,10,34,.34), rgba(18,10,34,0) 100%),
+    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(18,10,34,.20), rgba(18,10,34,0) 72%);
+  filter:blur(6px);
+  opacity:.9; z-index:0;
+  animation:sombra 4.6s ease-in-out 2.1s infinite;
   transition:opacity .85s ease, transform .85s ease;
 }
-@keyframes sombra{50%{transform:translateX(-50%) scale(.9)}}
+@keyframes sombra{50%{transform:translateX(-50%) scale(.92)}}
 #scene.is-open .floor-shadow{
-  animation:none; opacity:.16;
-  transform:translateX(-50%) translateY(40px) scale(.92);
+  animation:none; opacity:.55;
+  transform:translateX(-50%) scale(.9);
 }
 
-/* Capa que se eleva al pasar el mouse */
+/* Capa de elevación */
 .lift{
   position:relative; z-index:2;
-  transition:transform .85s cubic-bezier(.3,.7,.3,1), opacity .85s ease;
+  transition:transform .85s cubic-bezier(.3,.7,.3,1);
   animation:entrar .95s cubic-bezier(.2,.85,.3,1) .15s backwards;
 }
-#scene:not(.is-open):hover .lift{transform:translateY(-9px)}
-#scene.is-open .lift{transform:translateY(40px); opacity:.42}
-@keyframes entrar{from{opacity:0; transform:translateY(54px) scale(.95)}}
+#scene:not(.is-open):hover .lift{transform:translateY(-10px) scale(1.015)}
+#scene.is-open .lift{transform:translateY(-16px) scale(1.05)}
+@keyframes entrar{from{opacity:0; transform:translateY(56px) scale(.94)}}
 
-/* Levitación del sobre */
+/* Levitación suave + sacudida */
 .floaty{
   animation:
     flotar 4.6s ease-in-out 2.1s infinite,
@@ -307,29 +308,156 @@ body{
 }
 .envelope:focus-visible{
   outline:2px dashed rgba(132,100,196,.8);
-  outline-offset:12px; border-radius:12px;
+  outline-offset:14px;
+  border-radius:12px;
+}
+/* Retroceso físico cuando la solapa se abre */
+#scene.flap-open .envelope{animation:recoil .6s ease-out}
+@keyframes recoil{
+  0%{transform:rotateX(0)}
+  30%{transform:rotateX(-2.6deg)}
+  100%{transform:rotateX(0)}
 }
 
 /* Grano de papel */
 .paper::after{
   content:""; position:absolute; inset:0;
-  background-image:var(--noise);
-  opacity:.11; mix-blend-mode:multiply;
+  background-image:var(--noise), var(--noise);
+  background-size:120px 120px, 260px 260px;
+  opacity:.10;
+  mix-blend-mode:multiply;
   pointer-events:none; border-radius:inherit;
 }
 
-/* Pared trasera */
+/* Pared trasera: interior del sobre */
 .env-back{
   position:absolute; inset:0; z-index:2;
   border-radius:6px;
-  background:linear-gradient(180deg,#e9e3d5 0%,#ddd5c4 100%);
+  background:linear-gradient(180deg,#cdc2ab 0%,#d9d1bf 26%,#dcd4c3 100%);
   box-shadow:
-    inset 0 18px 26px -14px rgba(40,25,60,.5),
-    inset 0 -8px 16px -10px rgba(40,25,60,.28);
+    inset 0 14px 22px -12px rgba(40,25,60,.38),
+    inset 0 -8px 16px -10px rgba(40,25,60,.22);
+  transition:box-shadow .9s ease;
+}
+#scene.is-open .env-back{
+  box-shadow:
+    inset 0 26px 34px -12px rgba(28,14,52,.6),
+    inset 0 60px 50px -30px rgba(28,14,52,.35),
+    inset 0 -8px 16px -10px rgba(40,25,60,.22);
+}
+
+/* Frente del sobre con pliegues */
+.env-front{
+  position:absolute; inset:0; z-index:5;
+  border-radius:6px;
+  background:
+    radial-gradient(90px 60px at 22% 16%, rgba(255,255,255,.6), transparent 70%),
+    radial-gradient(130px 90px at 80% 32%, rgba(255,255,255,.35), transparent 72%),
+    linear-gradient(155deg,#ffffff 0%,#f5f2eb 48%,#e8e3d5 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -1px 0 rgba(95,75,55,.14),
+    0 1px 3px rgba(40,30,20,.14);
+}
+.env-front::before{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(180deg, rgba(60,40,80,.15), rgba(60,40,80,0) 15%);
+  transition:opacity .6s ease; pointer-events:none;
+}
+#scene.flap-open .env-front::before{opacity:0}
+
+/* Pliegues */
+.fold{position:absolute; inset:0}
+.fold-l{
+  clip-path:polygon(0 0, 0 100%, 44% 100%);
+  background:
+    linear-gradient(90deg, rgba(70,50,90,0) 84%, rgba(70,50,90,.11) 98%),
+    linear-gradient(115deg,#f8f5ef 0%,#ede8dc 68%,#e2dccd 100%);
+  filter:drop-shadow(2.5px 2px 2px rgba(70,50,90,.20));
+}
+.fold-r{
+  clip-path:polygon(100% 0, 100% 100%, 56% 100%);
+  background:
+    linear-gradient(-90deg, rgba(70,50,90,0) 84%, rgba(70,50,90,.11) 98%),
+    linear-gradient(-115deg,#f8f5ef 0%,#ede8dc 68%,#e2dccd 100%);
+  filter:drop-shadow(-2.5px 2px 2px rgba(70,50,90,.20));
+}
+.fold-b{
+  clip-path:polygon(0 100%, 100% 100%, 50% 40%);
+  background:
+    radial-gradient(140% 110% at 50% 100%, rgba(70,50,90,0) 58%, rgba(70,50,90,.09) 86%),
+    linear-gradient(0deg,#f3efe5 0%,#eae4d6 62%,#e0d9c7 100%);
+  filter:drop-shadow(0 -2.5px 2px rgba(70,50,90,.18));
+}
+
+/* Monograma */
+.mono{
+  position:absolute; left:50%; top:79%;
+  width:46px; height:25px;
+  transform:translate(-50%,-50%);
+  fill:rgba(105,85,60,.15);
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.6));
+}
+
+/* Sombra elástica de solapa cerrada */
+.flap-shadow{
+  position:absolute; left:0; top:0; z-index:6;
+  width:100%; height:142px;
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  background:linear-gradient(180deg, rgba(55,38,80,.18) 0%, rgba(55,38,80,.05) 40%, rgba(55,38,80,0) 72%);
+  opacity:1; pointer-events:none;
+  transition:opacity .7s ease .4s;
+}
+#scene.flap-open .flap-shadow{opacity:0; transition:opacity .5s ease}
+
+/* Solapa superior 3D */
+.flap{
+  position:absolute; left:0; top:0;
+  width:100%; height:142px;
+  z-index:7;
+  transform-origin:50% 0;
+  transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(.5,-.12,.3,1.32);
+  will-change:transform;
+}
+.flap.open{transform:rotateX(178deg)}
+.flap.behind{z-index:1}
+
+.flap-face{
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+}
+.flap-out{
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.5), rgba(255,255,255,0) 42%),
+    linear-gradient(180deg, rgba(70,50,90,.13), rgba(70,50,90,0) 24%),
+    linear-gradient(180deg,#fdfbf6 0%,#f1ecdf 62%,#ded7c5 100%);
+}
+.flap-in{
+  transform:rotateX(180deg);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(90,60,150,.25), transparent 60%),
+    linear-gradient(180deg,#332555 0%,#231641 55%,#170e30 100%);
+  box-shadow:inset 0 -12px 24px -8px rgba(0,0,0,.6);
+}
+.flap-in::before{
+  content:""; position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(45deg,  rgba(255,255,255,.05) 0 1.5px, transparent 1.5px 11px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 1.5px, transparent 1.5px 13px);
+}
+.flap-in::after{
+  content:""; position:absolute; inset:0;
+  background-image:var(--noise);
+  background-size:140px 140px;
+  opacity:.16;
+  mix-blend-mode:soft-light;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CARTA ORIGINAL — TEMA MORADO/ROSA, PAPEL CREMOSO, CARD GRANDE
+   CARTA ORIGINAL — 100% OPACA, TEMA MORADO/ROSA, CARD GRANDE
    ═══════════════════════════════════════════════════════════════ */
 
 .carta{
@@ -344,10 +472,11 @@ body{
     clip-path 1.05s cubic-bezier(.33,.6,.25,1);
   will-change:transform, clip-path;
   cursor:pointer;
-  /* Fondo sólido para que la carta NO sea transparente */
+  /* CARTA 100% OPACA — sin transparencia */
   background: var(--papel);
   border-radius:14px;
   overflow:hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
 /* Fase 1: la carta sube saliendo del sobre */
@@ -356,7 +485,7 @@ body{
   clip-path:inset(0 0 0 0);
 }
 
-/* Fase 2: la carta se convierte en card grande centrada (subpágina) */
+/* Fase 2: la carta se convierte en card grande centrada */
 .carta.free{
   position:fixed;
   left:50%; top:50%;
@@ -367,9 +496,13 @@ body{
   pointer-events:auto;
   clip-path:inset(0);
   transition:transform 1s cubic-bezier(.2,.85,.25,1);
+  background: var(--papel);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
 }
 
-/* Hoja de la carta - estilo original */
+/* Hoja de la carta - también opaca */
 .carta-papel{
   width:100%; height:100%;
   display:flex; flex-direction:column;
@@ -378,12 +511,22 @@ body{
     repeating-linear-gradient(0deg, transparent 0 30px, rgba(180,110,140,.10) 30px 31px),
     var(--papel);
   border-radius:14px;
-  box-shadow: 0 26px 60px rgba(15,0,25,.5), inset 0 0 40px rgba(190,120,140,.10);
+  box-shadow: inset 0 0 40px rgba(190,120,140,.10);
   padding: clamp(24px, 6vw, 56px) clamp(24px, 6vw, 64px) clamp(30px, 7vw, 60px);
   color: var(--tinta);
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
+}
+
+/* Efecto bordes quemados/sombreados para dar profundidad */
+.carta-papel::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:14px;
+  background:radial-gradient(circle at 50% 50%, transparent 55%, rgba(40,20,10,.45) 95%);
+  pointer-events:none;
+  mix-blend-mode:multiply;
 }
 
 .carta-titulo{
@@ -394,6 +537,7 @@ body{
   font-size: clamp(2.2rem, 7vw, 3.2rem);
   line-height:1.15;
   margin: 0 0 8px 0;
+  position:relative; z-index:2;
 }
 .carta-titulo::after{
   content:"♥";
@@ -411,6 +555,7 @@ body{
   padding-right: 8px;
   scrollbar-width: thin;
   scrollbar-color: rgba(164,19,60,.35) transparent;
+  position:relative; z-index:2;
 }
 .mensaje p{
   font-size: clamp(1.1rem, 2.9vw, 1.35rem);
@@ -459,6 +604,7 @@ body{
   opacity:0;
   transform: translateY(14px);
   transition: opacity .9s ease .15s, transform .9s ease .15s;
+  position:relative; z-index:2;
 }
 .firma .latido.visible{ opacity:1; transform:none; }
 .firma .latido{
@@ -485,91 +631,68 @@ body{
 .carta.free .carta-papel{animation:flotarCarta 5.5s ease-in-out 1.1s infinite}
 @keyframes flotarCarta{50%{transform:translateY(-7px) rotate(.5deg)}}
 
-/* Frente del sobre: solapas plegadas */
-.env-front{
-  position:absolute; inset:0; z-index:5;
-  border-radius:6px;
-  background:linear-gradient(155deg,#ffffff 0%,#f4f1ea 48%,#e9e4d8 100%);
-  box-shadow:0 1px 2px rgba(40,30,20,.15);
+/* Aurora mágica sobre la boca (solo al abrir) */
+.env-glow{
+  position:absolute; left:50%; top:-150px;
+  width:320px; height:240px;
+  transform:translateX(-50%);
+  z-index:2;
+  background:radial-gradient(ellipse at 50% 72%,
+    rgba(158,120,255,.40) 0%, rgba(120,80,220,.14) 46%, rgba(120,80,220,0) 72%);
+  filter:blur(16px);
+  opacity:0;
+  transition:opacity 1.1s ease;
+  pointer-events:none;
 }
-.env-front::before{
-  content:""; position:absolute; inset:0; border-radius:inherit;
-  background:linear-gradient(180deg, rgba(60,40,80,.16), rgba(60,40,80,0) 16%);
-  transition:opacity .6s ease; pointer-events:none;
-}
-#scene.flap-open .env-front::before{opacity:0}
+#scene.is-open .env-glow{opacity:1}
 
-.fold{position:absolute; inset:0}
-.fold-l{
-  clip-path:polygon(0 0, 0 100%, 44% 100%);
-  background:linear-gradient(115deg,#f7f4ee 0%,#ece7db 70%,#e3ddcf 100%);
-  filter:drop-shadow(2px 2px 1.5px rgba(70,50,90,.20));
+/* Labio luminoso en el borde de la boca */
+.mouth-glow{
+  position:absolute; left:6px; right:6px; top:-27px;
+  height:34px; z-index:3;
+  border-radius:6px 6px 0 0;
+  background:linear-gradient(180deg, rgba(172,132,255,.5), rgba(172,132,255,.12) 60%, transparent);
+  filter:blur(4px);
+  opacity:0;
+  transition:opacity .9s ease .1s;
+  pointer-events:none;
 }
-.fold-r{
-  clip-path:polygon(100% 0, 100% 100%, 56% 100%);
-  background:linear-gradient(-115deg,#f7f4ee 0%,#ece7db 70%,#e3ddcf 100%);
-  filter:drop-shadow(-2px 2px 1.5px rgba(70,50,90,.20));
-}
-.fold-b{
-  clip-path:polygon(0 100%, 100% 100%, 50% 40%);
-  background:linear-gradient(0deg,#f3efe5 0%,#eae4d6 60%,#e1dac8 100%);
-  filter:drop-shadow(0 -2px 1.5px rgba(70,50,90,.18));
-}
+#scene.is-open .mouth-glow{opacity:1}
 
-/* Sombra elástica de solapa cerrada */
-.flap-shadow{
-  position:absolute; left:0; top:0; z-index:6;
-  width:100%; height:142px;
-  clip-path:polygon(0 0, 100% 0, 50% 100%);
-  background:linear-gradient(180deg, rgba(55,38,80,.18) 0%, rgba(55,38,80,.05) 40%, rgba(55,38,80,0) 72%);
-  opacity:1; pointer-events:none;
-  transition:opacity .7s ease .4s;
+/* Motas de luz que ascienden desde dentro */
+.motes{
+  position:absolute; left:70px; top:-8px;
+  width:220px; height:10px;
+  z-index:3;
+  display:none;
+  pointer-events:none;
 }
-#scene.flap-open .flap-shadow{opacity:0; transition:opacity .5s ease}
-
-/* Solapa superior 3D */
-.flap{
-  position:absolute; left:0; top:0;
-  width:100%; height:142px;
-  z-index:7;
-  transform-origin:50% 0;
-  transform-style:preserve-3d;
-  transition:transform 1.05s cubic-bezier(.62,.05,.28,1);
-  will-change:transform;
+#scene.is-open .motes{display:block}
+.motes i{
+  position:absolute; bottom:0;
+  width:5px; height:5px;
+  border-radius:50%;
+  background:rgba(206,176,255,.9);
+  box-shadow:0 0 8px 2px rgba(170,120,255,.5);
+  opacity:0;
+  animation:mota var(--d,4s) ease-in-out var(--dl,0s) infinite;
 }
-.flap.open{transform:rotateX(178deg)}
-.flap.behind{z-index:1}
-
-.flap-face{
-  position:absolute; inset:0;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  clip-path:polygon(0 0, 100% 0, 50% 100%);
-}
-.flap-out{
-  background:
-    linear-gradient(180deg, rgba(70,50,90,.14), rgba(70,50,90,0) 24%),
-    linear-gradient(180deg,#fdfbf6 0%,#f1ecdf 62%,#dfd8c6 100%);
-}
-.flap-in{
-  transform:rotateX(180deg);
-  background:linear-gradient(180deg,#322454 0%,#231641 55%,#180e30 100%);
-  box-shadow:inset 0 -12px 24px -8px rgba(0,0,0,.55);
-}
-.flap-in::before{
-  content:""; position:absolute; inset:0;
-  background:
-    repeating-linear-gradient(45deg,  rgba(255,255,255,.05) 0 1.5px, transparent 1.5px 11px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 1.5px, transparent 1.5px 13px);
+@keyframes mota{
+  0%{transform:translate(0,8px) scale(.6); opacity:0}
+  18%{opacity:.95}
+  100%{transform:translate(var(--mx,0),-132px) scale(1); opacity:0}
 }
 
-/* Sello de cera con murciélago */
+/* ═══════════════════════════════════════════════════════════════
+   SELLO DE CERA CON MURCIÉLAGO
+   ═══════════════════════════════════════════════════════════════ */
+
 .seal{
   position:absolute; left:50%; top:129px;
-  width:96px; height:96px;
+  width:100px; height:100px;
   z-index:8;
   transform:translate(-50%,-50%);
-  filter:drop-shadow(0 8px 10px rgba(15,8,30,.4));
+  filter:drop-shadow(0 8px 10px rgba(15,8,30,.42));
   animation:
     estampar .5s cubic-bezier(.3,1.5,.45,1) 1.05s backwards,
     latir 3.4s ease-in-out 2s infinite;
@@ -579,49 +702,14 @@ body{
   55%{opacity:1; transform:translate(-50%,-50%) scale(.92)}
   to{transform:translate(-50%,-50%) scale(1)}
 }
-@keyframes latir{50%{transform:translate(-50%,-52%) scale(1.05)}}
+@keyframes latir{50%{transform:translate(-50%,-52.5%) scale(1.05)}}
 .seal.crack{animation:none}
 
-.seal-piece{
-  position:absolute; inset:0;
-  transition:
-    transform .62s cubic-bezier(.5,-.35,.45,1.25),
-    opacity .5s ease-in .08s;
-  will-change:transform, opacity;
-}
-.sp1{clip-path:polygon(0 0, 62% 0, 34% 100%, 0 100%)}
-.sp2{clip-path:polygon(62% 0, 100% 0, 100% 58%, 34% 100%)}
-.sp3{clip-path:polygon(0 100%, 34% 100%, 100% 58%, 100% 100%)}
-.seal.crack .sp1{transform:translate(-30px,-40px) rotate(-48deg); opacity:0; transition-delay:0s,.05s}
-.seal.crack .sp2{transform:translate(36px,-22px)  rotate(40deg);  opacity:0; transition-delay:.07s,.13s}
-.seal.crack .sp3{transform:translate(4px,46px)   rotate(74deg);  opacity:0; transition-delay:.14s,.2s}
-
-.seal-face{
-  position:absolute; inset:0;
-  border-radius:46% 54% 52% 48% / 52% 44% 56% 48%;
-  background:radial-gradient(circle at 34% 28%,
-    var(--cera1) 0%, var(--cera2) 24%, var(--cera3) 48%,
-    var(--cera4) 72%, var(--cera5) 100%);
-  box-shadow:
-    inset 0 3px 6px rgba(255,255,255,.16),
-    inset 0 -7px 12px rgba(0,0,0,.55),
-    inset 0 0 0 2px rgba(18,8,40,.35);
-}
-.seal-face::after{
-  content:""; position:absolute; inset:8px;
-  border-radius:inherit;
-  border:1.5px solid rgba(255,255,255,.10);
-  box-shadow:inset 0 2px 4px rgba(0,0,0,.45), 0 1px 1px rgba(255,255,255,.07);
-}
-.seal-face svg{
-  position:absolute; left:50%; top:50%;
-  width:72px; height:38px;
-  transform:translate(-50%,-52%);
-}
 .seal::before{
   content:""; position:absolute; inset:-4px; z-index:3;
-  background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.30) 50%, transparent 58%);
-  background-size:280% 280%; background-position:130% 0;
+  background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.32) 50%, transparent 58%);
+  background-size:280% 280%;
+  background-position:130% 0;
   mix-blend-mode:soft-light;
   animation:brillo 5.2s ease-in-out 2.4s infinite;
   pointer-events:none;
@@ -630,9 +718,78 @@ body{
 @keyframes brillo{0%,55%{background-position:130% 0} 85%,100%{background-position:-40% 0}}
 .seal.crack::before{opacity:0; animation:none}
 
+.seal::after{
+  content:""; position:absolute; inset:-12px; z-index:4;
+  border-radius:50%;
+  border:2px solid rgba(190,160,255,.55);
+  opacity:0;
+  transform:scale(.45);
+  pointer-events:none;
+}
+.seal.crack::after{animation:pulso .55s ease-out .05s forwards}
+@keyframes pulso{
+  0%{opacity:.85; transform:scale(.45)}
+  100%{opacity:0; transform:scale(1.75)}
+}
+
+.seal-piece{
+  position:absolute; inset:0;
+  transition:
+    transform .68s cubic-bezier(.5,-.35,.45,1.25),
+    opacity .55s ease-in .1s;
+  will-change:transform, opacity;
+}
+.sp1{clip-path:polygon(0 0, 46% 0, 52% 22%, 44% 40%, 54% 62%, 48% 80%, 52% 100%, 0 100%)}
+.sp2{clip-path:polygon(46% 0, 100% 0, 100% 72%, 78% 82%, 66% 70%, 48% 80%, 54% 62%, 44% 40%, 52% 22%)}
+.sp3{clip-path:polygon(52% 100%, 48% 80%, 66% 70%, 78% 82%, 100% 72%, 100% 100%)}
+.seal.crack .sp1{transform:translate(-34px,-44px) rotate(-52deg); opacity:0; transition-delay:0s,.06s}
+.seal.crack .sp2{transform:translate(38px,-24px)  rotate(42deg);  opacity:0; transition-delay:.08s,.15s}
+.seal.crack .sp3{transform:translate(6px,50px)   rotate(76deg);  opacity:0; transition-delay:.16s,.24s}
+
+.seal-face{
+  position:absolute; inset:0;
+  border-radius:47% 53% 45% 55% / 53% 46% 58% 42%;
+  background:
+    radial-gradient(circle at 26% 100%, var(--wax3) 0 7px, transparent 8px),
+    radial-gradient(circle at 55% 104%, var(--wax4) 0 5px, transparent 6px),
+    radial-gradient(circle at 78% 100%, var(--wax3) 0 4px, transparent 5px),
+    radial-gradient(circle at 34% 26%,
+      var(--wax1) 0%, var(--wax2) 22%, var(--wax3) 46%,
+      var(--wax4) 70%, var(--wax5) 100%);
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.18),
+    inset 0 -8px 14px rgba(0,0,0,.55),
+    inset 0 0 0 2px rgba(16,7,38,.38);
+}
+.seal-face::after{
+  content:""; position:absolute; inset:9px;
+  border-radius:inherit;
+  border:1.5px solid rgba(255,255,255,.10);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.45), 0 1px 1px rgba(255,255,255,.07);
+}
+.seal-face svg{
+  position:absolute; left:50%; top:50%;
+  width:74px; height:39px;
+  transform:translate(-50%,-52%);
+}
+
+/* Migas de cera */
+.crumb{
+  position:absolute; left:46px; top:44px;
+  width:7px; height:7px;
+  border-radius:60% 40% 55% 45% / 50% 60% 40% 50%;
+  background:radial-gradient(circle at 35% 30%, var(--wax2), var(--wax5));
+  opacity:.95;
+  transition:transform .8s cubic-bezier(.35,.1,.65,.9), opacity .72s ease-in .12s;
+}
+.seal.crack .crumb{
+  transform:translate(var(--cx),var(--cy)) rotate(var(--cr));
+  opacity:0;
+}
+
 /* Murciélaguecillos que escapan */
 .flybat{
-  position:absolute; left:36px; top:34px;
+  position:absolute; left:38px; top:36px;
   width:24px; height:13px;
   fill:#1c1136; opacity:0; pointer-events:none;
 }
@@ -651,11 +808,11 @@ body{
    RESPONSIVE Y ACCESIBILIDAD
    ═══════════════════════════════════════════════════════════════ */
 
-@media (max-height:760px){.scene{--s:.86}}
-@media (max-width:520px),(max-height:640px){.scene{--s:.76}}
-@media (max-width:380px),(max-height:520px){.scene{--s:.64}}
+@media (max-height:700px){.scene{--s:.85}}
+@media (max-width:520px),(max-height:560px){.scene{--s:.74}}
+@media (max-width:380px),(max-height:460px){.scene{--s:.62}}
 
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion:reduce){
   .luna, .estrella, .nube, .niebla, #flores, .flor, .petalo, .luz,
   .floaty, .seal, .floor-shadow, .flybat, .seal::before, .lift,
   .carta.rise .carta-papel, .carta.free .carta-papel, .resplandor{

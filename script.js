@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — JavaScript Vanilla
    Fondo: campo de flores nocturno
-   Sobre: murciélago (sello, solapa 3D, carta animada)
-   Carta: original (tema morado/rosa) como card grande que sale del sobre
+   Sobre: murciélago (sello, solapa 3D, aurora, motas, migas)
+   Carta: original (tema morado/rosa) 100% opaca como card grande
    Escritura: máquina de escribir (mensaje personalizable)
    ═══════════════════════════════════════════════════════════════ */
 
@@ -114,9 +114,8 @@ const seal      = document.getElementById("seal");
 const mensajeEl = document.getElementById("mensaje");
 const firmaEl   = document.getElementById("firma");
 
-let abierta     = false;
-let escribiendo = false;
-let saltar      = false;
+let ocupada     = false;
+let estado      = "sellado";   // sellado | abriendo | abierto | cerrando
 
 const reduceMov = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (reduceMov) { VELOCIDAD_TECLA = 8; PAUSA_LINEA = 100; }
@@ -126,33 +125,35 @@ const LINEAS = [SALUDO, ...MENSAJE, DESPEDIDA];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /* ═══════════════════════════════════════════════════════════════
-   APERTURA DEL SOBRE (secuencia del murciélago)
+   APERTURA DEL SOBRE (secuencia del nuevo murciélago)
    ═══════════════════════════════════════════════════════════════ */
 
 async function abrirCarta() {
-  if (abierta) return;
-  abierta = true;
+  if (ocupada || estado !== "sellado") return;
+  ocupada = true; estado = "abriendo";
 
-  // 1) La cera se resquebraja y los murciélaguecillos huyen
+  // 1) La cera se resquebraja: migas caen, murciélaguecillos huyen
   seal.classList.add("crack");
   await sleep(520);
 
-  // 2) La solapa gira en 3D
+  // 2) La solapa gira en 3D con rebote de papel
   flap.classList.add("open");
   scene.classList.add("flap-open");
-  await sleep(500);
-  flap.classList.add("behind");
-  await sleep(560);
+  await sleep(500);                   // mitad del giro…
+  flap.classList.add("behind");       // …pasa detrás del sobre
+  await sleep(880);
 
-  // 3) La carta emerge aleteando
+  // 3) El interior despierta: aurora, labio de luz y motas
+  scene.classList.add("is-open");
+  await sleep(800);
+
+  // 4) La carta emerge como card grande
   carta.classList.add("rise");
   await sleep(1020);
-
-  // 4) La carta se convierte en card grande centrada; el sobre se recede
   carta.classList.add("free");
-  scene.classList.add("is-open");
   await sleep(950);
 
+  estado = "abierto"; ocupada = false;
   iniciarCarta();
 }
 
@@ -161,33 +162,30 @@ async function abrirCarta() {
    ═══════════════════════════════════════════════════════════════ */
 
 async function cerrarCarta() {
-  if (ocupado || estado !== 'abierto') return;
-  ocupado = true; estado = 'cerrando';
+  if (ocupada || estado !== "abierto") return;
+  ocupada = true; estado = "cerrando";
 
-  carta.classList.remove('free');
+  carta.classList.remove("free");
   await sleep(920);
-  scene.classList.remove('is-open');
-  carta.classList.remove('rise');
+  scene.classList.remove("is-open");  // la luz se apaga
+  carta.classList.remove("rise");     // la carta se guarda
   await sleep(1100);
 
-  scene.classList.remove('flap-open');
-  flap.classList.remove('open');
-  await sleep(520);
-  flap.classList.remove('behind');
-  await sleep(580);
+  scene.classList.remove("flap-open");
+  flap.classList.remove("open");      // la solapa vuelve a cerrarse
+  await sleep(500);
+  flap.classList.remove("behind");
+  await sleep(950);
 
-  seal.classList.remove('crack');
+  seal.classList.remove("crack");     // la cera se restaura sola
   await sleep(700);
 
-  estado = 'sellado'; ocupado = false;
+  estado = "sellado"; ocupada = false;
 }
 
-let ocupado = false;
-let estado = 'sellado';
-
 function alternar(){
-  if (estado === 'sellado') abrirCarta();
-  else if (estado === 'abierto') cerrarCarta();
+  if (estado === "sellado") abrirCarta();
+  else if (estado === "abierto") cerrarCarta();
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -195,8 +193,6 @@ function alternar(){
    ═══════════════════════════════════════════════════════════════ */
 
 async function iniciarCarta() {
-  estado = 'abierto'; ocupado = false;
-
   // Título
   const titulo = document.getElementById("tituloCarta");
   if (titulo) titulo.textContent = TITULO;
@@ -262,6 +258,9 @@ async function escribirLineas() {
   siguiente();
 }
 
+let escribiendo = false;
+let saltar = false;
+
 function terminar(cursor) {
   escribiendo = false;
   cursor.remove();
@@ -272,7 +271,7 @@ function terminar(cursor) {
   }, 600);
 }
 
-/* ── Estallido de corazones al abrir (estilo original) ────────── */
+/* ── Estallido de corazones al abrir (estilo original, opcional) ── */
 
 function explotarCorazones() {
   if (reduceMov) return;
