@@ -1,29 +1,102 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — JavaScript Vanilla
    Fondo: campo de flores nocturno
-   Sobre: murciélago (sello, solapa 3D, carta que sale)
-   Escritura: máquina de escribir (mensaje personalizable)
+   Sobre: murciélago (sello, solapa 3D, carta animada)
+   Carta: estilo original (tema morado/rosa) + máquina de escribir
    ═══════════════════════════════════════════════════════════════ */
 
  /* ┌──────────────────────────────────────────────────────────┐
-    │  ESCRIBE AQUÍ TU MENSAJE PERSONALIZADO                    │
-    │  (solo edita las líneas de abajo, entre comillas)         │
+    │  MENSAJE PERSONALIZADO PARA NAYDÚ                         │
+    │  (edita las líneas de abajo si quieres cambiar algo)      │
     └──────────────────────────────────────────────────────────┘ */
 
 const TITULO    = "Para Naydú";          // Encabezado de la carta
-const SALUDO    = "¡Hola, hermosa!";     // Primera línea
+const SALUDO    = "Mi niña hermosa";     // Primera línea
 
-// Tu mensaje: una línea de texto entre comillas, separadas por comas.
 const MENSAJE   = [
-  "Cada día a tu lado descubro una razón más para sonreír.",
-  "Este pequeño rincón de internet lo hice solo para ti,",
-  "para recordarte que eres lo más bonito que me ha pasado.",
-  "Te pienso, te sonríe el corazón, y decidí escribirlo aquí,",
-  "porque hay cosas que merecen algo más que un mensaje cualquiera."
+  "Mi niña sabes qué día es hoy",
+  "sí, 27 de OCTUBRE, MI PRINCESA, HOY ES EL DÍA DE TU CUMPLEAÑOS",
+  "mi amor de verdad quisiera poder pasar este día tan importante contigo",
+  "poder celebrarlo como se debe, mi niña preciosa",
+  "como la niña hermosa que eres",
+  "pero sé que estás muy lejos y estás muy ocupadita esta semana",
+  "lo mejor que puedo hacer es recordarte lo hermosa y maravillosa que eres",
+  "mi niña, tú eres una niña inteligente, hermosa, bonita",
+  "no hay manera de describirte ante mis ojos",
+  "mi canelita, de verdad siempre serás la niña más hermosa que hay en este mundo",
+  "siempre serás y eres mi adoración entera.",
+  "mi amor, hoy cumples 19 añitos ;3",
+  "estás creciendo rápido",
+  "aún recuerdo cuando tenías 17 añitos",
+  "que salíamos a caminar a los cerros",
+  "salíamos a entrenar todos esos recuerdos del principio",
+  "mi vida, son muy lindos porque me hacen detenerme y poder observar",
+  "cómo hemos crecido juntos",
+  "ya son dos añitos que te veo lograr tus metas",
+  "esforzarte por lo que quieres",
+  "y más que todo estar ahí cuando no había nadie...",
+  "... mi amor, te amo de una manera tan indescriptible",
+  "mi princesa, mi canelita",
+  "no han habido palabras ni algo tan semejante a todo lo que he llegado a sentir por ti",
+  "mi morena hermosa, nunca habrán palabras ni nada que se acerque",
+  "te he amado sin razón alguna",
+  "te he deseado, te he amado, te he adorado",
+  "como un religioso a su dios, toda mi devoción te pertenece",
+  "solo quiero decirte que siempre estaré contigo",
+  "sin importar el momento, las circunstancias, el motivo o razón",
+  "siempre me tendrás conmigo",
+  "porque como mi amor, mi corazón, mi cuerpo y mi ser",
+  "siempre serán fieles a ti, estando para ti toda mi vida",
+  "o al menos hasta el último latido de mi corazón",
+  "... no hay tristeza que pueda con él",
+  "ni dolor que no pueda vencer, amor",
+  "puedo ser la alegría de tu amanecer",
+  "los besitos mañaneros que erizan a tu piel",
+  "yo amarte más no puedo...",
+  "por favor, no llores, morena",
+  "siempre estaré contigo incluso en los días que no puedas más",
+  "solo no llores, morena... no llores, mi morena",
+  "",
+  "no sé si recuerdes fragmentos de las canciones de Darviin",
+  "todas aquellas que te dediqué, te canté y te pude dar",
+  "con lo más puro de mi ser, tanto como un beso",
+  "sí, porque ¿qué será que todo es más bello cuando vos estás?",
+  "me niego que es mera casualidad, no, no, no..",
+  "algo tan bello solo pudo venir de mi dulce dios..",
+  "bésame con tus labios que hidratan con uno de esos besos",
+  "https://youtu.be/K-Y3afQINFA?si=Vp88gsQE8OJAyPJ1",
+  "",
+  "Mi niña, ah, de verdad quisiera poder estar ahí contigo",
+  "quisiera acortar la distancia con un solo paso o pensamiento",
+  "para que mis brazos fueran el refugio exacto",
+  "donde pudieras tú soltar el peso del día",
+  "mi canelita hermosa",
+  "me duele este espacio que me roba el brillo de tu risa",
+  "porque te adoro con una devoción y amor inmensa",
+  "y mi mundo entero orbita donde tú estás",
+  "si pudiera, detendría el reloj en este instante",
+  "para volar a tu lado",
+  "sentarme cerquita de ti",
+  "espantar cualquier sombra que te ronde",
+  "y recordarte lo infinitamente maravillosa que eres ante mis ojos",
+  "",
+  "Aunque mis manos hoy no puedan rozar tus mejillas",
+  "mi pensamiento ya cruzó el cielo entero para hacerte compañía",
+  "y demostrarte que siempre estaré contigo, mi princesa",
+  "sin importar las circunstancias",
+  "cierra los ojos un segundo",
+  "ahí en la quietud y en el calor de tu pecho",
+  "estoy latiendo a tu lado, siendo fiel hasta el último de mis latidos",
+  "guardaré cada abrazo y cada beso",
+  "para ser la alegría de tu amanecer",
+  "y vencer cualquier dolor",
+  "así que, por favor, no llores, mi morena",
+  "que todo este amor te abrace fuerte",
+  "hasta el día en que este quisiera se convierta al fin en un aquí estoy"
 ];
 
-const DESPEDIDA = "Con mucho amor.";     // Cierre de la carta
-const FIRMA     = "— De quien te ama con todo el corazón"; // Tu firma
+const DESPEDIDA = "Con todo mi amor, siempre.";     // Cierre de la carta
+const FIRMA     = "— Tu canelita que te ama";         // Tu firma
 
 /* Velocidades de la escritura (milisegundos) */
 let VELOCIDAD_TECLA = 40;   // tiempo entre letras (menor = más rápido)
@@ -66,8 +139,8 @@ async function abrirCarta() {
   // 2) La solapa gira en 3D
   flap.classList.add("open");
   scene.classList.add("flap-open");
-  await sleep(500);                  // mitad del giro…
-  flap.classList.add("behind");      // …pasa detrás del sobre
+  await sleep(500);
+  flap.classList.add("behind");
   await sleep(560);
 
   // 3) La carta emerge aleteando
@@ -135,7 +208,7 @@ async function escribirLineas() {
 
     let j = 0;
     const tick = async () => {
-      if (saltar) j = texto.length;     // un toque acelera todo
+      if (saltar) j = texto.length;
       p.textContent = texto.slice(0, j);
       p.appendChild(cursor);
       mensajeEl.scrollTop = mensajeEl.scrollHeight;
@@ -160,7 +233,6 @@ function terminar(cursor) {
   escribiendo = false;
   cursor.remove();
   firmaEl.querySelectorAll(".latido").forEach(l => l.classList.add("visible"));
-  // Al terminar, la carta vuelve suavemente al inicio para leerse completa
   setTimeout(() => {
     mensajeEl.scrollTo({ top: 0, behavior: reduceMov ? "auto" : "smooth" });
   }, 600);
@@ -179,7 +251,6 @@ scene.addEventListener("keydown", (e) => {
   }
 });
 
-// Un toque sobre la carta mientras escribe la completa al instante
 letter.addEventListener("click", () => {
   if (escribiendo) saltar = true;
 });
@@ -193,7 +264,6 @@ letter.addEventListener("click", () => {
 
   var azar = function(min, max){ return min + Math.random() * (max - min); };
 
-  /* ── Perfil de cada colina (en % de la pantalla) ── */
   function yAtras(x){  return 58 + 7*Math.sin(x/14 + 1.2) + 3*Math.sin(x/6); }
   function yMedio(x){  return 69 + 5*Math.sin(x/11 + 3.0) + 2.5*Math.sin(x/5 + 1); }
   function yFrente(x){ return 81 + 4*Math.sin(x/9 + 0.5) + 2.0*Math.sin(x/4.2 + 2); }
@@ -210,7 +280,6 @@ letter.addEventListener("click", () => {
   trazarColina("colinaMedio",  yMedio);
   trazarColina("colinaFrente", yFrente);
 
-  /* ── Estrellas en el cielo alto ── */
   var estrellas = document.getElementById("estrellas");
   for (var i = 0; i < 95; i++){
     var e = document.createElement("span");
@@ -225,7 +294,6 @@ letter.addEventListener("click", () => {
     estrellas.appendChild(e);
   }
 
-  /* ── Flores: pequeñas en la colina del fondo, grandes adelante ── */
   var flores = document.getElementById("flores");
 
   function crearFlor(x, y, tam, opacidad){
@@ -244,18 +312,13 @@ letter.addEventListener("click", () => {
     flores.appendChild(f);
   }
 
-  /* Flores lejanas (colina media, casi en el horizonte) */
   for (var j = 0; j < 48; j++){
     var xl = azar(0, 100);
     crearFlor(xl, yMedio(xl) + azar(0.5, 2.5), azar(3, 5.5), azar(.45, .7));
   }
-
-  /* Flores del campo medio, llenando la ladera entre las dos colinas */
   for (var w = 0; w < 50; w++){
     crearFlor(azar(0, 100), azar(72.5, 80), azar(4.5, 7), azar(.55, .8));
   }
-
-  /* Flores del frente, más grandes cuanto más abajo (perspectiva) */
   for (var k = 0; k < 105; k++){
     var x = azar(0, 100);
     var borde = yFrente(x);
@@ -264,7 +327,6 @@ letter.addEventListener("click", () => {
     crearFlor(x, y, azar(6, 9) + prof * 0.75, azar(.75, 1));
   }
 
-  /* ── Luces flotantes (semillas de diente de león) ── */
   var luciernagas = document.getElementById("luciernagas");
   for (var m = 0; m < 26; m++){
     var l = document.createElement("span");
@@ -276,7 +338,6 @@ letter.addEventListener("click", () => {
     luciernagas.appendChild(l);
   }
 
-  /* ── Pétalos cayendo (34, colores claros que brillan en la noche) ── */
   var petalos = document.getElementById("petalos");
   var colores = [
     "linear-gradient(135deg,#ffffff,#ffe9f2)",
