@@ -442,7 +442,7 @@ window.addEventListener("load", () => {
     luciernagas.appendChild(l);
   }
 
-  /* Pétalos cayendo (34, colores claros que brillan en la noche) */
+  /* Pétalos cayendo en toda la página */
   var petalos = document.getElementById("petalos");
   var colores = [
     "linear-gradient(135deg,#ffffff,#ffe9f2)",
@@ -451,13 +451,14 @@ window.addEventListener("load", () => {
     "linear-gradient(135deg,#fde2ef,#e88fb2)",
     "linear-gradient(135deg,#f2fbff,#cfe9ff)"
   ];
-  for (var p = 0; p < 34; p++){
+  var totalPetalos = window.innerWidth > 768 ? 52 : 34; /* más en escritorio */
+  for (var p = 0; p < totalPetalos; p++){
     var pe = document.createElement("span");
     pe.className = "petalo";
-    pe.style.setProperty("--x", azar(-2, 100) + "%");
+    pe.style.setProperty("--x", azar(-8, 108) + "%");   /* cubre todo el ancho */
     pe.style.setProperty("--tam", azar(11, 21) + "px");
-    pe.style.setProperty("--dur", azar(9, 15) + "s");
-    pe.style.setProperty("--delay", -azar(0, 14) + "s");
+    pe.style.setProperty("--dur", azar(10, 18) + "s");  /* caída más lenta y variada */
+    pe.style.setProperty("--delay", -azar(0, 20) + "s");
     var hoja = document.createElement("i");
     hoja.style.background = colores[p % colores.length];
     hoja.style.setProperty("--gir", azar(2.2, 4) + "s");
