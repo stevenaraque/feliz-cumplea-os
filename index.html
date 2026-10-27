@@ -17,22 +17,46 @@
 </head>
 <body>
 
-  <!-- Corazones flotando en el fondo (animados 100% con CSS) -->
-  <div class="fondo" aria-hidden="true">
-    <span class="corazon" style="--x:5%;  --tam:18px; --dur:16s; --delay:-4s;  --op:.30; --c:#ff8fb3"></span>
-    <span class="corazon" style="--x:14%; --tam:12px; --dur:22s; --delay:-11s; --op:.22; --c:#ff5d8f"></span>
-    <span class="corazon" style="--x:24%; --tam:24px; --dur:19s; --delay:-7s;  --op:.28; --c:#ffb3c6"></span>
-    <span class="corazon" style="--x:33%; --tam:10px; --dur:25s; --delay:-15s; --op:.20; --c:#ff8fb3"></span>
-    <span class="corazon" style="--x:42%; --tam:20px; --dur:17s; --delay:-2s;  --op:.32; --c:#e63976"></span>
-    <span class="corazon" style="--x:52%; --tam:14px; --dur:21s; --delay:-9s;  --op:.25; --c:#ff8fb3"></span>
-    <span class="corazon" style="--x:61%; --tam:26px; --dur:18s; --delay:-13s; --op:.24; --c:#ff5d8f"></span>
-    <span class="corazon" style="--x:70%; --tam:11px; --dur:24s; --delay:-6s;  --op:.22; --c:#ffb3c6"></span>
-    <span class="corazon" style="--x:78%; --tam:19px; --dur:16s; --delay:-1s;  --op:.30; --c:#ff8fb3"></span>
-    <span class="corazon" style="--x:86%; --tam:15px; --dur:20s; --delay:-10s; --op:.26; --c:#e63976"></span>
-    <span class="corazon" style="--x:93%; --tam:22px; --dur:23s; --delay:-16s; --op:.22; --c:#ff5d8f"></span>
-    <span class="corazon suave" style="--x:9%;  --tam:26px; --dur:26s; --delay:-8s;  --op:.16; --c:#ffb3c6"></span>
-    <span class="corazon suave" style="--x:47%; --tam:30px; --dur:28s; --delay:-18s; --op:.14; --c:#ff8fb3"></span>
-    <span class="corazon suave" style="--x:83%; --tam:28px; --dur:27s; --delay:-5s;  --op:.15; --c:#ff5d8f"></span>
+  <!-- Fondo: campo de flores nocturno -->
+  <div class="fondo-campo" aria-hidden="true">
+    <div class="vigneta"></div>
+
+    <div class="luna" aria-hidden="true"></div>
+    <div id="estrellas" aria-hidden="true"></div>
+
+    <div class="nubes" aria-hidden="true">
+      <span class="nube" style="--e:1.5; --dur:150s; --delay:-20s; top:10%"></span>
+      <span class="nube" style="--e:1.1; --dur:120s; --delay:-60s; top:20%"></span>
+      <span class="nube" style="--e:1.9; --dur:180s; --delay:-90s; top:27%"></span>
+      <span class="nube" style="--e:0.9; --dur:105s; --delay:-40s; top:34%"></span>
+      <span class="nube" style="--e:1.4; --dur:160s; --delay:-130s; top:14%"></span>
+      <span class="nube" style="--e:1.2; --dur:135s; --delay:-15s; top:40%"></span>
+    </div>
+
+    <svg class="colinas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="gAtras" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#245049"/>
+          <stop offset="1" stop-color="#0f2a26"/>
+        </linearGradient>
+        <linearGradient id="gMedio" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2f6e52"/>
+          <stop offset="1" stop-color="#15382b"/>
+        </linearGradient>
+        <linearGradient id="gFrente" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4a9e6b"/>
+          <stop offset="1" stop-color="#1b4531"/>
+        </linearGradient>
+      </defs>
+      <path id="colinaAtras" fill="url(#gAtras)"/>
+      <path id="colinaMedio" fill="url(#gMedio)"/>
+      <path id="colinaFrente" fill="url(#gFrente)"/>
+    </svg>
+
+    <div class="niebla" aria-hidden="true"></div>
+    <div id="flores" aria-hidden="true"></div>
+    <div id="luciernagas" aria-hidden="true"></div>
+    <div id="petalos" aria-hidden="true"></div>
   </div>
 
   <!-- Brillo suave que late en el centro -->

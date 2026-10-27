@@ -1,7 +1,8 @@
 /* ══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — CSS puro, sin frameworks
-   Paleta: noche púrpura → rosa, con acentos coral/rosa fuerte
-   ══════════════════════════════════════════════════════════════ */
+   Fondo: campo de flores nocturno (estrellas, luna, colinas,
+   flores, luciérnagas y pétalos cayendo)
+   ═══════════════════════════════════════════════════════════════ */
 
 :root{
   --w-sobre: min(80vw, 340px);
@@ -20,53 +21,231 @@ body{
   font-family:'Lora', Georgia, 'Times New Roman', serif;
   color:#fff;
   overflow:hidden;
-  background: linear-gradient(160deg, #1c0b2e 0%, #3b1650 34%, #6b2260 68%, #93325f 100%);
-  background-attachment: fixed;
+  background: linear-gradient(180deg,
+    #081a36 0%, #123252 38%, #1d4a5f 66%, #2a6b62 100%);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Viñeta suave para dar profundidad (dentro del fondo-campo) */
+.vigneta{
+  content:""; position:absolute; inset:0; z-index:9;
+  pointer-events:none;
+  background: radial-gradient(ellipse at 50% 42%, transparent 55%, rgba(2,8,20,.5));
+}
+
 ::selection{ background:#e63976; color:#fff; }
 
-/* ─────────── Fondo: corazones flotando (solo CSS) ─────────── */
+/* ─────────── Fondo: campo de flores nocturno ─────────── */
 
-.fondo{
+.fondo-campo{
   position:fixed; inset:0; overflow:hidden;
   pointer-events:none; z-index:0;
 }
 
-.corazon{
-  position:absolute; bottom:-12vh; left:var(--x, 50%);
-  width:var(--tam, 16px); height:var(--tam, 16px);
-  background:var(--c, #ff8fb3);
-  opacity:var(--op, .3);
-  transform: rotate(-45deg);
-  animation: flotar var(--dur, 18s) linear var(--delay, 0s) infinite;
+/* ── Luna ── */
+.luna{
+  position:absolute; z-index:1;
+  top:9%; left:13%;
+  width:60px; height:60px; border-radius:50%;
+  background: radial-gradient(circle at 38% 36%, #fdfbf2, #e9e5d0 62%, #d8d4bd);
+  box-shadow:
+    0 0 30px 8px rgba(255,250,220,.30),
+    0 0 110px 36px rgba(190,215,255,.16);
+  animation: respirar 7s ease-in-out infinite alternate;
+}
+@keyframes respirar{ from{ opacity:.85; } to{ opacity:1; } }
+
+/* ── Estrellas ── */
+.estrella{
+  position:absolute; border-radius:50%;
+  background:#fff;
+  box-shadow: 0 0 4px rgba(255,255,255,.9);
+  animation: parpadear var(--d, 2.4s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+@keyframes parpadear{ from{ opacity:.15; } to{ opacity:.95; } }
+
+/* ── Nubes ── */
+.nube{
+  position:absolute; left:-32vw;
+  width:calc(150px * var(--e, 1)); height:calc(44px * var(--e, 1));
+  background: rgba(206,222,240,.14);
+  border-radius:60px;
+  filter: blur(9px);
+  animation: deriva var(--dur, 140s) linear var(--delay, 0s) infinite;
+}
+.nube::before, .nube::after{
+  content:""; position:absolute; border-radius:50%;
+  background: inherit;
+}
+.nube::before{
+  width:58%; height:150%; left:16%; top:-62%;
+}
+.nube::after{
+  width:42%; height:105%; right:12%; top:-34%;
+}
+@keyframes deriva{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(165vw); }
+}
+
+/* ── Colinas ── */
+.colinas{
+  position:absolute; inset:0; z-index:3;
+  width:100%; height:100%;
+  display:block;
+}
+
+/* ── Niebla sobre el horizonte ── */
+.niebla{
+  position:absolute; z-index:4;
+  left:-12%; right:-12%; top:64%; height:16%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(178,220,208,.16), transparent 70%);
+  filter: blur(12px);
+  animation: desplazar 44s ease-in-out infinite alternate;
+}
+@keyframes desplazar{
+  from{ transform: translateX(-3vw); }
+  to  { transform: translateX(3vw); }
+}
+
+/* ── Viento global: todo el campo se mece junto ── */
+#flores{
+  position:absolute; inset:0; z-index:6;
+  transform-origin:50% 100%;
+  pointer-events:none;
+  animation: viento 8.5s ease-in-out infinite;
+}
+@keyframes viento{
+  0%, 100%{ transform: translateX(0)    rotate(0deg); }
+  28%     { transform: translateX(6px)  rotate(.35deg); }
+  52%     { transform: translateX(-4px) rotate(-.28deg); }
+  76%     { transform: translateX(5px)  rotate(.3deg); }
+}
+
+/* ── Flores (dientes de león blancos) ── */
+.flor{
+  position:absolute;
+  transform-origin: bottom center;
+  animation: mecerFlor var(--dur, 5s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+.tallo{
+  position:absolute; top:100%; left:50%;
+  width:2px; height:var(--tal, 12px);
+  margin-left:-1px;
+  background: linear-gradient(180deg, #2f7a50, #143726);
+  border-radius:2px;
+}
+.cabeza{
+  display:block; position:relative;
+  width:100%; height:100%; border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 42%,
+      #ffffff 0 16%,
+      rgba(255,255,255,.9) 34%,
+      rgba(232,242,255,.38) 58%,
+      transparent 72%);
+}
+.cabeza::before{
+  content:""; position:absolute;
+  left:50%; top:50%;
+  width:.22em; height:.22em;
+  margin:-.11em 0 0 -.11em;
+  border-radius:50%;
+  background: rgba(255,255,255,.92);
+  box-shadow:
+    0 -.30em  0 0 rgba(255,255,255,.88),
+    .26em -.15em 0 0 rgba(255,255,255,.84),
+    .26em  .15em 0 0 rgba(255,255,255,.84),
+    0  .30em  0 0 rgba(255,255,255,.88),
+    -.26em  .15em 0 0 rgba(255,255,255,.84),
+    -.26em -.15em 0 0 rgba(255,255,255,.84);
+}
+.cabeza::after{
+  content:""; position:absolute;
+  left:50%; top:52%;
+  width:26%; height:26%;
+  margin:-13% 0 0 -13%;
+  border-radius:50%;
+  background:#fff7d9;
+  box-shadow: 0 0 4px rgba(255,250,210,.9);
+}
+@keyframes mecerFlor{
+  from{ transform: rotate(calc(var(--amp, 4deg) * -1)); }
+  to  { transform: rotate(var(--amp, 4deg)); }
+}
+
+/* ── Pétalos cayendo ── */
+.petalo{
+  position:absolute; z-index:8;
+  top:-9vh; left:var(--x, 50%);
+  width:var(--tam, 16px); height:calc(var(--tam, 16px) * .72);
+  perspective: 130px;
+  pointer-events:none;
+  animation: caerPetalo var(--dur, 12s) linear var(--delay, 0s) infinite;
+  will-change: transform, opacity;
+}
+.petalo i{
+  display:block; width:100%; height:100%;
+  border-radius: 100% 6% 100% 6%;
+  box-shadow: 0 0 9px rgba(255,215,235,.55), inset 0 0 3px rgba(255,255,255,.7);
+  animation: girarPetalo var(--gir, 3s) linear var(--delay, 0s) infinite;
   will-change: transform;
 }
-.corazon::before,
-.corazon::after{
-  content:""; position:absolute;
-  width:100%; height:100%;
-  background:inherit; border-radius:50%;
+@keyframes caerPetalo{
+  0%  { transform: translate(0, 0);        opacity:0; }
+  7%  { opacity:1; }
+  25% { transform: translate(4.5vw, 26vh); opacity:1; }
+  50% { transform: translate(-3.5vw, 52vh); }
+  75% { transform: translate(3.8vw, 78vh); }
+  92% { opacity:1; }
+  100%{ transform: translate(-2vw, 112vh); opacity:0; }
 }
-.corazon::before{ top:-50%; left:0; }
-.corazon::after{ left:50%; top:0; }
-.corazon.suave{ filter: blur(3px); }
-
-@keyframes flotar{
-  0%   { transform: translate(0, 0)        rotate(-45deg); }
-  30%  { transform: translate(16px, -34vh) rotate(-38deg); }
-  60%  { transform: translate(-12px, -70vh) rotate(-52deg); }
-  100% { transform: translate(8px, -118vh) rotate(-45deg); }
+@keyframes girarPetalo{
+  from{ transform: rotate(0deg)   rotateY(0deg); }
+  50% { transform: rotate(180deg) rotateY(180deg); }
+  to  { transform: rotate(360deg) rotateY(360deg); }
 }
 
+/* ── Luces flotantes (semillas / luciérnagas) ── */
+.luz{
+  position:absolute; z-index:7;
+  bottom:-4vh; left:var(--x, 50%);
+  width:var(--tam, 5px); height:var(--tam, 5px);
+  border-radius:50%;
+  background: radial-gradient(circle,
+    #fffbe8 0 30%,
+    rgba(255,244,190,.65) 55%,
+    transparent 75%);
+  animation:
+    subir var(--dur, 16s) linear var(--delay, 0s) infinite,
+    brillar 2.1s ease-in-out var(--delay, 0s) infinite alternate;
+}
+@keyframes subir{
+  0%  { transform: translate(0, 0); }
+  30% { transform: translate(14px, -32vh); }
+  60% { transform: translate(-12px, -66vh); }
+  100%{ transform: translate(8px, -110vh); }
+}
+@keyframes brillar{
+  from{ opacity:.25; }
+  to  { opacity:.95; }
+}
+
+/* Resplandor que late en el centro (mantenido del diseño original) */
 .resplandor{
   position:fixed; inset:0; pointer-events:none; z-index:0;
   background: radial-gradient(circle at 50% 26%, rgba(255,150,190,.20), transparent 62%);
   animation: latirBrillo 6s ease-in-out infinite alternate;
 }
 @keyframes latirBrillo{ from{ opacity:.55; } to{ opacity:1; } }
+
+/* Accesibilidad: menos animación si el sistema lo pide */
+@media (prefers-reduced-motion: reduce){
+  .luna, .estrella, .nube, .niebla, #flores, .flor, .petalo, .luz, .resplandor{
+    animation: none !important;
+  }
+}
 
 /* ─────────── Escena central ─────────── */
 
@@ -341,8 +520,6 @@ body.leyendo .carta{
 /* ─────────── Responsive y accesibilidad ─────────── */
 
 @media (max-width: 415px){
-  /* En pantallas angostas el sobre es más pequeño: la carta escondida
-     se reduce para que nunca asome cuando el sobre flota */
   .carta{
     transform: translate(-50%, -50%) translateY(0) scale(.42);
   }
@@ -352,15 +529,5 @@ body.leyendo .carta{
   .carta{ height:min(66dvh, 430px); }
   body.abierto .carta{
     transform: translate(-50%, -50%) translateY(-30%) scale(.52);
-  }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .corazon, .sobre, .pista, .resplandor, .firma .latido{
-    animation: none !important;
-  }
-  .carta, .sobre-solapa, .zona-sobre{
-    transition-duration:.2s !important;
-    transition-delay:0s !important;
   }
 }
