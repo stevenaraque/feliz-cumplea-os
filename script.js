@@ -113,6 +113,8 @@ const carta     = document.getElementById("carta");
 const seal      = document.getElementById("seal");
 const mensajeEl = document.getElementById("mensaje");
 const firmaEl   = document.getElementById("firma");
+const musica    = document.getElementById("musica-fondo");
+const btnMusica = document.getElementById("btn-musica");
 
 let ocupada     = false;
 let estado      = "sellado";   // sellado | abriendo | abierto | cerrando
@@ -128,9 +130,19 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
    APERTURA DEL SOBRE (secuencia del nuevo murciélago)
    ═══════════════════════════════════════════════════════════════ */
 
+function reproducirMusica() {
+  if (!musica) return;
+  musica.play().catch(() => {
+    // Navegador bloqueó autoplay; se activará en la próxima interacción del usuario
+  });
+}
+
 async function abrirCarta() {
   if (ocupada || estado !== "sellado") return;
   ocupada = true; estado = "abriendo";
+
+  // Activar música en la primera interacción del usuario
+  reproducirMusica();
 
   // 1) La cera se resquebraja: migas caen, murciélaguecillos huyen
   seal.classList.add("crack");
@@ -310,6 +322,34 @@ scene.addEventListener("keydown", (e) => {
 // Un toque sobre la carta mientras escribe la completa al instante
 carta.addEventListener("click", () => {
   if (escribiendo) saltar = true;
+});
+
+// Botón de control de música (activa / pausa)
+if (btnMusica && musica) {
+  let musicaActiva = false;
+
+  btnMusica.addEventListener("click", (e) => {
+    e.stopPropagation(); // no disparar clic del sobre
+    if (musica.paused) {
+      musica.play().then(() => {
+        musicaActiva = true;
+        btnMusica.setAttribute("aria-pressed", "true");
+      });
+    } else {
+      musica.pause();
+      musicaActiva = false;
+      btnMusica.setAttribute("aria-pressed", "false");
+    }
+  });
+}
+
+// Intento de autoplay al cargar la página (navegadores pueden bloquearlo)
+window.addEventListener("load", () => {
+  if (musica) {
+    musica.play().catch(() => {
+      // Bloqueado por el navegador; se activará con la primera interacción
+    });
+  }
 });
 
 /* ── FONDO: CAMPO DE FLORES NOCTURNO — generación dinámica ─────── */

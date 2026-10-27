@@ -805,6 +805,41 @@ body{
 .seal.crack .f4{animation-delay:.26s}
 
 /* ═══════════════════════════════════════════════════════════════
+   BOTÓN DE CONTROL DE MÚSICA
+   ═══════════════════════════════════════════════════════════════ */
+
+#btn-musica{
+  position:fixed;
+  top:14px;
+  right:14px;
+  width:44px; height:44px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(6px);
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  z-index:100;
+  display:grid; place-items:center;
+  transition:background .2s ease, transform .2s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+#btn-musica:hover{
+  background:rgba(255,255,255,.25);
+  transform:scale(1.05);
+}
+#btn-musica:active{ transform:scale(.95); }
+#btn-musica[aria-pressed="true"]{
+  background:rgba(164,19,60,.25);
+  color:#ffd3e0;
+}
+#btn-musica:focus-visible{
+  outline:2px dashed rgba(255,183,205,.85);
+  outline-offset:2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    RESPONSIVE Y ACCESIBILIDAD
    ═══════════════════════════════════════════════════════════════ */
 

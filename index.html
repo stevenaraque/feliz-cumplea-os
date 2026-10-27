@@ -160,6 +160,14 @@
     </div>
   </main>
 
+  <!-- Música de fondo (se activa al abrir el sobre / primer clic) -->
+  <audio id="musica-fondo" src="videoplayback.webm" loop preload="auto"></audio>
+
+  <!-- Botón para activar/desactivar la música -->
+  <button id="btn-musica" aria-label="Activar/desactivar música" title="Música" aria-pressed="false">
+    <span aria-hidden="true">♪</span>
+  </button>
+
   <noscript>
     <p style="position:fixed; inset:auto 0 0 0; text-align:center; padding:14px; background:rgba(0,0,0,.55); font-family:sans-serif;">
       Activa JavaScript para abrir tu sorpresa.
