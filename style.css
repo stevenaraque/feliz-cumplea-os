@@ -1,0 +1,366 @@
+/* ══════════════════════════════════════════════════════════════
+   SOBRE SORPRESA PARA NAYDÚ — CSS puro, sin frameworks
+   Paleta: noche púrpura → rosa, con acentos coral/rosa fuerte
+   ══════════════════════════════════════════════════════════════ */
+
+:root{
+  --w-sobre: min(80vw, 340px);
+  --h-sobre: calc(var(--w-sobre) * 0.68);
+  --papel: #fff7ec;
+  --tinta: #5b3a4e;
+  --rosa-fuerte: #a4133c;
+  --radio: 12px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html, body{ height:100%; }
+
+body{
+  font-family:'Lora', Georgia, 'Times New Roman', serif;
+  color:#fff;
+  overflow:hidden;
+  background: linear-gradient(160deg, #1c0b2e 0%, #3b1650 34%, #6b2260 68%, #93325f 100%);
+  background-attachment: fixed;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection{ background:#e63976; color:#fff; }
+
+/* ─────────── Fondo: corazones flotando (solo CSS) ─────────── */
+
+.fondo{
+  position:fixed; inset:0; overflow:hidden;
+  pointer-events:none; z-index:0;
+}
+
+.corazon{
+  position:absolute; bottom:-12vh; left:var(--x, 50%);
+  width:var(--tam, 16px); height:var(--tam, 16px);
+  background:var(--c, #ff8fb3);
+  opacity:var(--op, .3);
+  transform: rotate(-45deg);
+  animation: flotar var(--dur, 18s) linear var(--delay, 0s) infinite;
+  will-change: transform;
+}
+.corazon::before,
+.corazon::after{
+  content:""; position:absolute;
+  width:100%; height:100%;
+  background:inherit; border-radius:50%;
+}
+.corazon::before{ top:-50%; left:0; }
+.corazon::after{ left:50%; top:0; }
+.corazon.suave{ filter: blur(3px); }
+
+@keyframes flotar{
+  0%   { transform: translate(0, 0)        rotate(-45deg); }
+  30%  { transform: translate(16px, -34vh) rotate(-38deg); }
+  60%  { transform: translate(-12px, -70vh) rotate(-52deg); }
+  100% { transform: translate(8px, -118vh) rotate(-45deg); }
+}
+
+.resplandor{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background: radial-gradient(circle at 50% 26%, rgba(255,150,190,.20), transparent 62%);
+  animation: latirBrillo 6s ease-in-out infinite alternate;
+}
+@keyframes latirBrillo{ from{ opacity:.55; } to{ opacity:1; } }
+
+/* ─────────── Escena central ─────────── */
+
+.escena{
+  position:fixed; inset:0; z-index:1;
+  display:grid; place-items:center;
+}
+
+.zona-sobre{
+  position:relative; z-index:2;
+  cursor:pointer; outline:none;
+  user-select:none; -webkit-user-select:none;
+  transition: opacity .65s ease .05s, transform .7s ease .05s;
+}
+.zona-sobre:focus-visible{
+  outline:2px dashed rgba(255,183,205,.85);
+  outline-offset:16px; border-radius:18px;
+}
+
+body.leyendo .zona-sobre{
+  opacity:0;
+  transform: translateY(90px) scale(.9);
+  pointer-events:none;
+}
+
+/* ─────────── El sobre ─────────── */
+
+.sobre{
+  position:relative;
+  width:var(--w-sobre); height:var(--h-sobre);
+  perspective: 1100px;
+  animation: mecer 3.8s ease-in-out infinite;
+  filter: drop-shadow(0 20px 34px rgba(10,0,20,.45));
+  transition: filter .35s ease;
+}
+@keyframes mecer{
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-9px); }
+}
+
+/* Al pasar el mouse/dedo: palpita y cambia el brillo */
+.zona-sobre:hover .sobre{
+  animation: latirSobre 1.05s ease-in-out infinite;
+  filter: drop-shadow(0 24px 46px rgba(255,80,140,.38));
+}
+@keyframes latirSobre{
+  0%,100%{ transform: scale(1); }
+  50%    { transform: scale(1.05); }
+}
+
+.sobre-atras{
+  position:absolute; inset:0; z-index:0;
+  background: linear-gradient(180deg, #a02a57, #7c1f47);
+  border-radius: var(--radio);
+  box-shadow: inset 0 0 24px rgba(0,0,0,.22);
+}
+
+/* Bolsillo frontal (la "V" del sobre) */
+.sobre-frente{
+  position:absolute; inset:0; z-index:2;
+  background: linear-gradient(175deg, #d0567f 0%, #c04370 45%, #a52f5e 100%);
+  border-radius: var(--radio);
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Solapa superior: gira con rotateX al abrir */
+.sobre-solapa{
+  position:absolute; top:0; left:0; width:100%; height:56%;
+  z-index:3;
+  background: linear-gradient(180deg, #d1537c, #b83868);
+  border-radius: var(--radio) var(--radio) 0 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform .85s cubic-bezier(.55,.06,.35,1);
+  backface-visibility: visible;
+}
+body.abierto .sobre-solapa{
+  transform: rotateX(180deg);
+  z-index:0;
+}
+
+/* Sello de cera con corazón */
+.sello{
+  position:absolute; z-index:4;
+  left:50%; top: calc(var(--h-sobre) * .52);
+  transform: translate(-50%, -50%);
+  width: calc(var(--w-sobre) * .20); height: calc(var(--w-sobre) * .20);
+  border-radius:50%;
+  display:grid; place-items:center;
+  background: radial-gradient(circle at 34% 30%, #ff7d9c, #d81b60 62%, #a4133c 100%);
+  box-shadow: 0 6px 16px rgba(120,10,50,.5), inset 0 2px 6px rgba(255,255,255,.35);
+  color:#ffe1ea;
+  font-size: calc(var(--w-sobre) * .085);
+  line-height:1;
+  pointer-events:none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+body.abierto .sello{
+  opacity:0;
+  transform: translate(-50%, -50%) scale(.5);
+}
+
+/* Texto "Toca para abrir" */
+.pista{
+  position:absolute;
+  top: calc(100% + 26px); left:50%;
+  transform: translateX(-50%);
+  white-space:nowrap;
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  color:#ffd3e0;
+  text-shadow: 0 2px 12px rgba(255,120,170,.45);
+  animation: palpitar 2.2s ease-in-out infinite;
+}
+@keyframes palpitar{
+  0%,100%{ transform: translate(-50%, 0);   opacity:.72; }
+  50%    { transform: translate(-50%, -5px); opacity:1; }
+}
+body.leyendo .pista{ opacity:0; transition: opacity .3s ease; }
+
+/* ─────────── La carta ─────────── */
+
+.carta{
+  position:absolute; z-index:1;
+  left:50%; top:50%;
+  width:min(86vw, 500px); height:min(62dvh, 450px);
+  transform: translate(-50%, -50%) translateY(0) scale(.46);
+  transition: transform 1.05s cubic-bezier(.22,.9,.32,1) .55s;
+  pointer-events:none;
+}
+
+/* Fase 1: la hoja sube saliendo del sobre */
+body.abierto .carta{
+  transform: translate(-50%, -50%) translateY(-34%) scale(.62);
+}
+
+/* Fase 2: la carta queda centrada como protagonista */
+body.leyendo .carta{
+  transform: translate(-50%, -50%) translateY(0) scale(1);
+  z-index:6;
+  pointer-events:auto;
+  transition: transform 1s cubic-bezier(.2,.85,.25,1);
+}
+
+.carta-papel{
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  background:
+    radial-gradient(120% 90% at 20% 0%, rgba(255,214,180,.55), transparent 55%),
+    repeating-linear-gradient(0deg, transparent 0 30px, rgba(180,110,140,.10) 30px 31px),
+    var(--papel);
+  border-radius:14px;
+  box-shadow: 0 26px 60px rgba(15,0,25,.5), inset 0 0 40px rgba(190,120,140,.10);
+  padding: clamp(20px, 5vw, 40px) clamp(20px, 6vw, 46px) clamp(16px, 4vw, 30px);
+  color: var(--tinta);
+}
+
+.carta-titulo{
+  font-family:'Dancing Script', cursive;
+  font-weight:700;
+  color: var(--rosa-fuerte);
+  text-align:center;
+  font-size: clamp(1.7rem, 6.5vw, 2.3rem);
+  line-height:1.15;
+}
+.carta-titulo::after{
+  content:"♥";
+  display:block;
+  font-size:.8rem;
+  letter-spacing:4px;
+  color:#c9184a;
+  opacity:.6;
+  margin-top:4px;
+}
+
+.mensaje{
+  flex:1 1 auto;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  margin-top: clamp(8px, 2.5vh, 16px);
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(164,19,60,.35) transparent;
+}
+.mensaje p{
+  font-size: clamp(.98rem, 2.7vw, 1.08rem);
+  line-height:1.75;
+  margin:.45em 0;
+  min-height:1.75em;
+}
+/* El saludo y la despedida van con letra manuscrita */
+.mensaje p:first-child,
+.mensaje p.ultimo{
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(1.3rem, 4.6vw, 1.6rem);
+  color: var(--rosa-fuerte);
+  line-height:1.4;
+}
+.mensaje p.ultimo{ margin-top:.9em; }
+
+/* Cursor del efecto máquina de escribir */
+.cursor{
+  display:inline-block;
+  width:2px; height:1em;
+  margin-left:3px;
+  vertical-align:-.12em;
+  background: var(--rosa-fuerte);
+  animation: parpadeo 1s steps(2, start) infinite;
+}
+@keyframes parpadeo{
+  0%,100%{ opacity:1; }
+  50%    { opacity:0; }
+}
+
+/* Firma que aparece al terminar la carta */
+.firma{
+  margin-top:10px;
+  text-align:right;
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(1.35rem, 4.8vw, 1.7rem);
+  color: var(--rosa-fuerte);
+  display:flex; align-items:center; justify-content:flex-end; gap:10px;
+  opacity:0;
+  transform: translateY(10px);
+  transition: opacity .9s ease .15s, transform .9s ease .15s;
+}
+.firma.visible{ opacity:1; transform:none; }
+.firma .latido{
+  display:inline-block;
+  color:#e0234e;
+  font-size:.9em;
+  animation: latirCorazon 1.1s ease-in-out infinite;
+}
+@keyframes latirCorazon{
+  0%,100%{ transform:scale(1); }
+  30%    { transform:scale(1.25); }
+  45%    { transform:scale(1); }
+  60%    { transform:scale(1.18); }
+}
+
+/* ─────────── Estallido de corazones al abrir ─────────── */
+
+.chispa{
+  position:absolute; z-index:7;
+  left:50%; top:50%;
+  width:var(--tam, 14px); height:var(--tam, 14px);
+  pointer-events:none;
+  animation: estallar 1.15s cubic-bezier(.15,.6,.35,1) forwards;
+}
+.chispa i{
+  display:block; width:100%; height:100%;
+  background:var(--c, #ff8fb3);
+  transform:rotate(-45deg);
+  position:relative;
+}
+.chispa i::before,
+.chispa i::after{
+  content:""; position:absolute;
+  width:100%; height:100%;
+  background:inherit; border-radius:50%;
+}
+.chispa i::before{ top:-50%; left:0; }
+.chispa i::after{ left:50%; top:0; }
+
+@keyframes estallar{
+  0%   { transform: translate(-50%,-50%) scale(.3) rotate(0deg); opacity:1; }
+  100% { transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, -120px))) scale(1) rotate(14deg); opacity:0; }
+}
+
+/* ─────────── Responsive y accesibilidad ─────────── */
+
+@media (max-width: 415px){
+  /* En pantallas angostas el sobre es más pequeño: la carta escondida
+     se reduce para que nunca asome cuando el sobre flota */
+  .carta{
+    transform: translate(-50%, -50%) translateY(0) scale(.42);
+  }
+}
+
+@media (max-height: 600px){
+  .carta{ height:min(66dvh, 430px); }
+  body.abierto .carta{
+    transform: translate(-50%, -50%) translateY(-30%) scale(.52);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .corazon, .sobre, .pista, .resplandor, .firma .latido{
+    animation: none !important;
+  }
+  .carta, .sobre-solapa, .zona-sobre{
+    transition-duration:.2s !important;
+    transition-delay:0s !important;
+  }
+}

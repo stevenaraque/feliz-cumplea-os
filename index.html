@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Para Naydú ♥</title>
+  <meta name="description" content="Una pequeña sorpresa digital para ti. Toca el sobre para abrir tu carta." />
+  <meta name="theme-color" content="#2a0e3f" />
+  <meta property="og:title" content="Tienes una carta esperando" />
+  <meta property="og:description" content="Toca el sobre para abrir tu sorpresa." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%92%96%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Corazones flotando en el fondo (animados 100% con CSS) -->
+  <div class="fondo" aria-hidden="true">
+    <span class="corazon" style="--x:5%;  --tam:18px; --dur:16s; --delay:-4s;  --op:.30; --c:#ff8fb3"></span>
+    <span class="corazon" style="--x:14%; --tam:12px; --dur:22s; --delay:-11s; --op:.22; --c:#ff5d8f"></span>
+    <span class="corazon" style="--x:24%; --tam:24px; --dur:19s; --delay:-7s;  --op:.28; --c:#ffb3c6"></span>
+    <span class="corazon" style="--x:33%; --tam:10px; --dur:25s; --delay:-15s; --op:.20; --c:#ff8fb3"></span>
+    <span class="corazon" style="--x:42%; --tam:20px; --dur:17s; --delay:-2s;  --op:.32; --c:#e63976"></span>
+    <span class="corazon" style="--x:52%; --tam:14px; --dur:21s; --delay:-9s;  --op:.25; --c:#ff8fb3"></span>
+    <span class="corazon" style="--x:61%; --tam:26px; --dur:18s; --delay:-13s; --op:.24; --c:#ff5d8f"></span>
+    <span class="corazon" style="--x:70%; --tam:11px; --dur:24s; --delay:-6s;  --op:.22; --c:#ffb3c6"></span>
+    <span class="corazon" style="--x:78%; --tam:19px; --dur:16s; --delay:-1s;  --op:.30; --c:#ff8fb3"></span>
+    <span class="corazon" style="--x:86%; --tam:15px; --dur:20s; --delay:-10s; --op:.26; --c:#e63976"></span>
+    <span class="corazon" style="--x:93%; --tam:22px; --dur:23s; --delay:-16s; --op:.22; --c:#ff5d8f"></span>
+    <span class="corazon suave" style="--x:9%;  --tam:26px; --dur:26s; --delay:-8s;  --op:.16; --c:#ffb3c6"></span>
+    <span class="corazon suave" style="--x:47%; --tam:30px; --dur:28s; --delay:-18s; --op:.14; --c:#ff8fb3"></span>
+    <span class="corazon suave" style="--x:83%; --tam:28px; --dur:27s; --delay:-5s;  --op:.15; --c:#ff5d8f"></span>
+  </div>
+
+  <!-- Brillo suave que late en el centro -->
+  <div class="resplandor" aria-hidden="true"></div>
+
+  <main class="escena" id="escena">
+
+    <!-- El sobre interactivo -->
+    <div class="zona-sobre" id="zonaSobre" role="button" tabindex="0" aria-label="Abrir la carta sorpresa">
+      <div class="sobre">
+        <div class="sobre-atras"></div>
+        <div class="sobre-frente"></div>
+        <div class="sobre-solapa"></div>
+        <div class="sello"><span aria-hidden="true">♥</span></div>
+      </div>
+      <p class="pista" aria-hidden="true">Toca para abrir</p>
+    </div>
+
+    <!-- La carta (mismo papel que sale del sobre y queda centrada) -->
+    <div class="carta" id="carta">
+      <div class="carta-papel">
+        <h2 class="carta-titulo" id="tituloCarta">Para Naydú</h2>
+        <div class="mensaje" id="mensaje"></div>
+        <p class="firma" id="firma"></p>
+      </div>
+    </div>
+
+  </main>
+
+  <noscript>
+    <p style="position:fixed; inset:auto 0 0 0; text-align:center; padding:14px; background:rgba(0,0,0,.55); font-family:sans-serif;">
+      Activa JavaScript para abrir tu sorpresa.
+    </p>
+  </noscript>
+
+  <script src="script.js"></script>
+</body>
+</html>
