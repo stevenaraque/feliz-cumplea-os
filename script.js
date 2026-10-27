@@ -1,8 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════
    SOBRE SORPRESA PARA NAYDÚ — JavaScript Vanilla
    Fondo: campo de flores nocturno
-   Sobre: estilo original (rosado/púrpura)
-   Carta: card grande, subpágina, máquina de escribir
+   Sobre: murciélago (sello, solapa 3D, carta animada)
+   Carta: original (tema morado/rosa) como card grande que sale del sobre
+   Escritura: máquina de escribir (mensaje personalizable)
    ═══════════════════════════════════════════════════════════════ */
 
  /* ┌──────────────────────────────────────────────────────────┐
@@ -106,12 +107,12 @@ let PAUSA_LINEA     = 400;  // pausa entre líneas
    A partir de aquí no necesitas tocar nada.
    ═══════════════════════════════════════════════════════════════ */
 
-const zonaSobre  = document.getElementById("zonaSobre");
-const escena     = document.getElementById("escena");
-const cartaEl    = document.getElementById("carta");
-const mensajeEl  = document.getElementById("mensaje");
-const firmaEl    = document.getElementById("firma");
-const tituloEl   = document.getElementById("tituloCarta");
+const scene     = document.getElementById("scene");
+const flap      = document.getElementById("flap");
+const carta     = document.getElementById("carta");
+const seal      = document.getElementById("seal");
+const mensajeEl = document.getElementById("mensaje");
+const firmaEl   = document.getElementById("firma");
 
 let abierta     = false;
 let escribiendo = false;
@@ -122,24 +123,85 @@ if (reduceMov) { VELOCIDAD_TECLA = 8; PAUSA_LINEA = 100; }
 
 const LINEAS = [SALUDO, ...MENSAJE, DESPEDIDA];
 
-/* ── Apertura del sobre (estilo original) ─────────────────────── */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function abrirCarta() {
+/* ═══════════════════════════════════════════════════════════════
+   APERTURA DEL SOBRE (secuencia del murciélago)
+   ═══════════════════════════════════════════════════════════════ */
+
+async function abrirCarta() {
   if (abierta) return;
   abierta = true;
 
-  document.body.classList.add("abierto");   // solapa gira + hoja sube
-  explotarCorazones();
+  // 1) La cera se resquebraja y los murciélaguecillos huyen
+  seal.classList.add("crack");
+  await sleep(520);
 
-  setTimeout(() => document.body.classList.add("leyendo"), reduceMov ? 200 : 1600);
-  setTimeout(iniciarCarta, reduceMov ? 400 : 2700);
+  // 2) La solapa gira en 3D
+  flap.classList.add("open");
+  scene.classList.add("flap-open");
+  await sleep(500);
+  flap.classList.add("behind");
+  await sleep(560);
+
+  // 3) La carta emerge aleteando
+  carta.classList.add("rise");
+  await sleep(1020);
+
+  // 4) La carta se convierte en card grande centrada; el sobre se recede
+  carta.classList.add("free");
+  scene.classList.add("is-open");
+  await sleep(950);
+
+  iniciarCarta();
 }
 
-/* ── Escritura de la carta (efecto máquina de escribir) ───────── */
+/* ═══════════════════════════════════════════════════════════════
+   CIERRE DE LA CARTA (vuelve al sobre)
+   ═══════════════════════════════════════════════════════════════ */
 
-function iniciarCarta() {
-  tituloEl.textContent = TITULO;
+async function cerrarCarta() {
+  if (ocupado || estado !== 'abierto') return;
+  ocupado = true; estado = 'cerrando';
 
+  carta.classList.remove('free');
+  await sleep(920);
+  scene.classList.remove('is-open');
+  carta.classList.remove('rise');
+  await sleep(1100);
+
+  scene.classList.remove('flap-open');
+  flap.classList.remove('open');
+  await sleep(520);
+  flap.classList.remove('behind');
+  await sleep(580);
+
+  seal.classList.remove('crack');
+  await sleep(700);
+
+  estado = 'sellado'; ocupado = false;
+}
+
+let ocupado = false;
+let estado = 'sellado';
+
+function alternar(){
+  if (estado === 'sellado') abrirCarta();
+  else if (estado === 'abierto') cerrarCarta();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESCRITURA DE LA CARTA (efecto máquina de escribir)
+   ═══════════════════════════════════════════════════════════════ */
+
+async function iniciarCarta() {
+  estado = 'abierto'; ocupado = false;
+
+  // Título
+  const titulo = document.getElementById("tituloCarta");
+  if (titulo) titulo.textContent = TITULO;
+
+  // Firma (se muestra al terminar)
   firmaEl.textContent = "";
   firmaEl.append(FIRMA, " ", crearLatido());
 
@@ -153,7 +215,7 @@ function crearLatido() {
   return s;
 }
 
-function escribirLineas() {
+async function escribirLineas() {
   escribiendo = true;
 
   const cursor = document.createElement("span");
@@ -179,7 +241,7 @@ function escribirLineas() {
 
     let j = 0;
     const tick = async () => {
-      if (saltar) j = texto.length;     // un toque acelera todo
+      if (saltar) j = texto.length;
       p.textContent = texto.slice(0, j);
       p.appendChild(cursor);
       mensajeEl.scrollTop = mensajeEl.scrollHeight;
@@ -210,8 +272,6 @@ function terminar(cursor) {
   }, 600);
 }
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
 /* ── Estallido de corazones al abrir (estilo original) ────────── */
 
 function explotarCorazones() {
@@ -232,24 +292,24 @@ function explotarCorazones() {
     chispa.style.setProperty("--c", colores[k % colores.length]);
     chispa.appendChild(document.createElement("i"));
 
-    escena.appendChild(chispa);
+    scene.appendChild(chispa);
     setTimeout(() => chispa.remove(), 1400);
   }
 }
 
 /* ── Eventos ──────────────────────────────────────────────────── */
 
-zonaSobre.addEventListener("click", abrirCarta);
+scene.addEventListener("click", alternar);
 
-zonaSobre.addEventListener("keydown", (e) => {
+scene.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
-    abrirCarta();
+    alternar();
   }
 });
 
 // Un toque sobre la carta mientras escribe la completa al instante
-cartaEl.addEventListener("click", () => {
+carta.addEventListener("click", () => {
   if (escribiendo) saltar = true;
 });
 
