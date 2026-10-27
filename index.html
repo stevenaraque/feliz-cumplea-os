@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -9,12 +10,16 @@
   <meta property="og:title" content="Tienes una carta esperando" />
   <meta property="og:description" content="Toca el sobre para abrir tu sorpresa." />
   <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%92%96%3C/text%3E%3C/svg%3E" />
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%92%96%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <!-- Fondo: campo de flores nocturno (siempre visible detrás de todo) -->
@@ -33,21 +38,21 @@
     <svg class="colinas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="gAtras" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#245049"/>
-          <stop offset="1" stop-color="#0f2a26"/>
+          <stop offset="0" stop-color="#245049" />
+          <stop offset="1" stop-color="#0f2a26" />
         </linearGradient>
         <linearGradient id="gMedio" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#2f6e52"/>
-          <stop offset="1" stop-color="#15382b"/>
+          <stop offset="0" stop-color="#2f6e52" />
+          <stop offset="1" stop-color="#15382b" />
         </linearGradient>
         <linearGradient id="gFrente" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#4a9e6b"/>
-          <stop offset="1" stop-color="#1b4531"/>
+          <stop offset="0" stop-color="#4a9e6b" />
+          <stop offset="1" stop-color="#1b4531" />
         </linearGradient>
       </defs>
-      <path id="colinaAtras" fill="url(#gAtras)"/>
-      <path id="colinaMedio" fill="url(#gMedio)"/>
-      <path id="colinaFrente" fill="url(#gFrente)"/>
+      <path id="colinaAtras" fill="url(#gAtras)" />
+      <path id="colinaMedio" fill="url(#gMedio)" />
+      <path id="colinaFrente" fill="url(#gFrente)" />
     </svg>
     <div class="niebla" aria-hidden="true"></div>
     <div id="flores" aria-hidden="true"></div>
@@ -61,10 +66,11 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="gradBat" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#34205c"/>
-        <stop offset="1" stop-color="#0d0622"/>
+        <stop offset="0" stop-color="#34205c" />
+        <stop offset="1" stop-color="#0d0622" />
       </linearGradient>
-      <path id="bat" d="M60 11 L54 2.2 L56.8 10.2 C54 8 51.5 8.2 48.5 9.6 C41 4.6 32 4.4 25.5 8 C18.5 11.8 12.5 10.8 7 5.6 C9.8 11.4 11.2 17.2 10.8 23.2 C14.8 20.4 19 20.6 22.6 23.8 C21.4 30 23.4 35.8 27.8 40.2 C31 35.8 35.8 34.4 40.6 36 C41.6 42.6 45.6 47.8 51.6 50.6 C53.6 45.4 56.4 42.4 60 41.4 C63.6 42.4 66.4 45.4 68.4 50.6 C74.4 47.8 78.4 42.6 79.4 36 C84.2 34.4 89 35.8 92.2 40.2 C96.6 35.8 98.6 30 97.4 23.8 C101 20.6 105.2 20.4 109.2 23.2 C108.8 17.2 110.2 11.4 113 5.6 C107.5 10.8 101.5 11.8 94.5 8 C88 4.4 79 4.6 71.5 9.6 C68.5 8.2 66 8 63.2 10.2 L66 2.2 Z"/>
+      <path id="bat"
+        d="M60 11 L54 2.2 L56.8 10.2 C54 8 51.5 8.2 48.5 9.6 C41 4.6 32 4.4 25.5 8 C18.5 11.8 12.5 10.8 7 5.6 C9.8 11.4 11.2 17.2 10.8 23.2 C14.8 20.4 19 20.6 22.6 23.8 C21.4 30 23.4 35.8 27.8 40.2 C31 35.8 35.8 34.4 40.6 36 C41.6 42.6 45.6 47.8 51.6 50.6 C53.6 45.4 56.4 42.4 60 41.4 C63.6 42.4 66.4 45.4 68.4 50.6 C74.4 47.8 78.4 42.6 79.4 36 C84.2 34.4 89 35.8 92.2 40.2 C96.6 35.8 98.6 30 97.4 23.8 C101 20.6 105.2 20.4 109.2 23.2 C108.8 17.2 110.2 11.4 113 5.6 C107.5 10.8 101.5 11.8 94.5 8 C88 4.4 79 4.6 71.5 9.6 C68.5 8.2 66 8 63.2 10.2 L66 2.2 Z" />
     </defs>
   </svg>
 
@@ -76,8 +82,8 @@
       <div class="lift">
         <div class="floaty">
           <div class="envelope" id="envelope" role="button" tabindex="0"
-               aria-label="Sobre sellado con un murciélago. Pulsa para romper el sello y abrir la carta."
-               aria-expanded="false" aria-controls="carta">
+            aria-label="Sobre sellado con un murciélago. Pulsa para romper el sello y abrir la carta."
+            aria-expanded="false" aria-controls="carta">
 
             <!-- 0 · aurora mágica sobre la boca (visible al abrir) -->
             <div class="env-glow"></div>
@@ -104,7 +110,9 @@
               <div class="fold fold-l paper"></div>
               <div class="fold fold-r paper"></div>
               <div class="fold fold-b paper"></div>
-              <svg class="mono" viewBox="0 0 120 64" aria-hidden="true"><use href="#bat"/></svg>
+              <svg class="mono" viewBox="0 0 120 64" aria-hidden="true">
+                <use href="#bat" />
+              </svg>
             </div>
 
             <!-- 4 · sombra que proyecta la solapa cerrada -->
@@ -123,32 +131,46 @@
               <div class="crumb" style="--cx:-4px;  --cy:74px; --cr:120deg; width:6px; height:6px"></div>
               <div class="crumb" style="--cx:12px;  --cy:40px; --cr:-30deg; width:4px; height:4px"></div>
 
-              <div class="seal-piece sp1"><div class="seal-face">
-                <svg viewBox="0 0 120 64">
-                  <use href="#bat" transform="translate(0,2.4)"  fill="#e4d6ff" opacity=".22"/>
-                  <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5"/>
-                  <use href="#bat" fill="url(#gradBat)"/>
-                </svg>
-              </div></div>
-              <div class="seal-piece sp2"><div class="seal-face">
-                <svg viewBox="0 0 120 64">
-                  <use href="#bat" transform="translate(0,2.4)"  fill="#e4d6ff" opacity=".22"/>
-                  <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5"/>
-                  <use href="#bat" fill="url(#gradBat)"/>
-                </svg>
-              </div></div>
-              <div class="seal-piece sp3"><div class="seal-face">
-                <svg viewBox="0 0 120 64">
-                  <use href="#bat" transform="translate(0,2.4)"  fill="#e4d6ff" opacity=".22"/>
-                  <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5"/>
-                  <use href="#bat" fill="url(#gradBat)"/>
-                </svg>
-              </div></div>
+              <div class="seal-piece sp1">
+                <div class="seal-face">
+                  <svg viewBox="0 0 120 64">
+                    <use href="#bat" transform="translate(0,2.4)" fill="#e4d6ff" opacity=".22" />
+                    <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5" />
+                    <use href="#bat" fill="url(#gradBat)" />
+                  </svg>
+                </div>
+              </div>
+              <div class="seal-piece sp2">
+                <div class="seal-face">
+                  <svg viewBox="0 0 120 64">
+                    <use href="#bat" transform="translate(0,2.4)" fill="#e4d6ff" opacity=".22" />
+                    <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5" />
+                    <use href="#bat" fill="url(#gradBat)" />
+                  </svg>
+                </div>
+              </div>
+              <div class="seal-piece sp3">
+                <div class="seal-face">
+                  <svg viewBox="0 0 120 64">
+                    <use href="#bat" transform="translate(0,2.4)" fill="#e4d6ff" opacity=".22" />
+                    <use href="#bat" transform="translate(0,-1.4)" fill="#05020e" opacity=".5" />
+                    <use href="#bat" fill="url(#gradBat)" />
+                  </svg>
+                </div>
+              </div>
 
-              <svg class="flybat f1" viewBox="0 0 120 64" style="--dx:-92px; --dy:-78px;  --dr:-44deg"><use href="#bat"/></svg>
-              <svg class="flybat f2" viewBox="0 0 120 64" style="--dx:80px;  --dy:-96px;  --dr:36deg"><use href="#bat"/></svg>
-              <svg class="flybat f3" viewBox="0 0 120 64" style="--dx:-48px; --dy:-124px; --dr:-28deg"><use href="#bat"/></svg>
-              <svg class="flybat f4" viewBox="0 0 120 64" style="--dx:112px; --dy:-52px;  --dr:54deg"><use href="#bat"/></svg>
+              <svg class="flybat f1" viewBox="0 0 120 64" style="--dx:-92px; --dy:-78px;  --dr:-44deg">
+                <use href="#bat" />
+              </svg>
+              <svg class="flybat f2" viewBox="0 0 120 64" style="--dx:80px;  --dy:-96px;  --dr:36deg">
+                <use href="#bat" />
+              </svg>
+              <svg class="flybat f3" viewBox="0 0 120 64" style="--dx:-48px; --dy:-124px; --dr:-28deg">
+                <use href="#bat" />
+              </svg>
+              <svg class="flybat f4" viewBox="0 0 120 64" style="--dx:112px; --dy:-52px;  --dr:54deg">
+                <use href="#bat" />
+              </svg>
             </div>
 
           </div>
@@ -182,11 +204,13 @@
   </button>
 
   <noscript>
-    <p style="position:fixed; inset:auto 0 0 0; text-align:center; padding:14px; background:rgba(0,0,0,.55); font-family:sans-serif;">
+    <p
+      style="position:fixed; inset:auto 0 0 0; text-align:center; padding:14px; background:rgba(0,0,0,.55); font-family:sans-serif;">
       Activa JavaScript para abrir tu sorpresa.
     </p>
   </noscript>
 
   <script src="script.js"></script>
 </body>
+
 </html>
