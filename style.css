@@ -344,6 +344,10 @@ body{
     clip-path 1.05s cubic-bezier(.33,.6,.25,1);
   will-change:transform, clip-path;
   cursor:pointer;
+  /* Fondo sólido para que la carta NO sea transparente */
+  background: var(--papel);
+  border-radius:14px;
+  overflow:hidden;
 }
 
 /* Fase 1: la carta sube saliendo del sobre */
