@@ -175,9 +175,15 @@ body{
   to  { transform: rotate(var(--amp, 4deg)); }
 }
 
+#petalos{
+  position:relative;            /* contexto de posicionamiento explícito */
+  inset:0;
+  pointer-events:none;
+}
+
 .petalo{
   position:absolute; z-index:8;
-  top:-9vh; left:var(--x, 50%);
+  top:-2vh; left:var(--x, 50%); /* empezó menos fuera del contenedor para escritorio */
   width:var(--tam, 16px); height:calc(var(--tam, 16px) * .72);
   perspective: 130px;
   pointer-events:none;
