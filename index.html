@@ -33,16 +33,16 @@
     <svg class="colinas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="gAtras" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#142846"/>
-          <stop offset="1" stop-color="#0a1527"/>
+          <stop offset="0" stop-color="#245049"/>
+          <stop offset="1" stop-color="#0f2a26"/>
         </linearGradient>
         <linearGradient id="gMedio" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#1a355c"/>
-          <stop offset="1" stop-color="#0d1c32"/>
+          <stop offset="0" stop-color="#2f6e52"/>
+          <stop offset="1" stop-color="#15382b"/>
         </linearGradient>
         <linearGradient id="gFrente" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#1e3f6d"/>
-          <stop offset="1" stop-color="#10223d"/>
+          <stop offset="0" stop-color="#4a9e6b"/>
+          <stop offset="1" stop-color="#1b4531"/>
         </linearGradient>
       </defs>
       <path id="colinaAtras" fill="url(#gAtras)"/>
@@ -96,16 +96,8 @@
               <i style="left:90%; --d:4.9s; --dl:1.9s; --mx:8px"></i>
             </div>
 
-            <!-- 2 · LA CARTA ORIGINAL (opaca, tema morado/rosa) que sale del sobre -->
-            <div class="carta" id="carta" role="dialog" aria-labelledby="tituloCarta" aria-hidden="true">
-              <button class="carta-cerrar" id="cerrarCarta" type="button" aria-label="Cerrar la carta">×</button>
-              <div class="carta-papel">
-                <h2 class="carta-titulo" id="tituloCarta">Para Naydú</h2>
-                <div class="mensaje" id="mensaje"></div>
-                <p class="firma" id="firma"></p>
-              </div>
-              <div class="pista" id="pistaCarta" aria-hidden="true">Toca la carta para verla completa</div>
-            </div>
+            <!-- 2 · Hoja que asoma del sobre al abrirse -->
+            <div class="paper-peek paper" aria-hidden="true"></div>
 
             <!-- 3 · frente del sobre: solapas plegadas + monograma -->
             <div class="env-front paper">
@@ -162,6 +154,17 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Carta interactiva desplegable a pantalla completa -->
+    <div class="carta" id="carta" role="dialog" aria-labelledby="tituloCarta" aria-hidden="true">
+      <button class="carta-cerrar" id="cerrarCarta" type="button" aria-label="Cerrar la carta">×</button>
+      <div class="carta-papel">
+        <h2 class="carta-titulo" id="tituloCarta">Para Naydú</h2>
+        <div class="mensaje" id="mensaje"></div>
+        <p class="firma" id="firma"></p>
+      </div>
+      <div class="pista" id="pistaCarta" aria-hidden="true">Toca la carta para verla completa</div>
     </div>
   </main>
 

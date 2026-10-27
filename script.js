@@ -173,19 +173,18 @@ async function abrirCarta() {
   scene.classList.add("flap-open");
   await sleep(500 * RITMO);             // mitad del giro…
   flap.classList.add("behind");         // …pasa detrás del sobre
-  await sleep(880 * RITMO);
+  await sleep(700 * RITMO);
 
-  // 3) El interior despierta: aurora, labio de luz y motas
+  // 3) El interior despierta: aurora, labio de luz, motas y hoja asomando
   scene.classList.add("is-open");
-  await sleep(800 * RITMO);
+  await sleep(750 * RITMO);
 
-  // 4) La carta emerge como card grande
-  carta.classList.add("rise");
-  await sleep(1020 * RITMO);
-  carta.classList.add("free");
+  // 4) La carta emerge majestuosa y centrada a pantalla completa
+  scene.classList.add("carta-activa");
+  carta.classList.add("free", "abierta");
   carta.setAttribute("aria-hidden", "false");
   document.body.classList.add("carta-abierta");
-  await sleep(950 * RITMO);
+  await sleep(850 * RITMO);
 
   estado = "abierto"; ocupada = false;
   iniciarCarta();
@@ -204,20 +203,21 @@ async function cerrarCarta() {
   ocultarPista();
   document.body.classList.remove("carta-abierta");
   carta.setAttribute("aria-hidden", "true");
-  carta.classList.remove("free");
-  await sleep(920 * RITMO);
+  carta.classList.remove("free", "abierta");
+  scene.classList.remove("carta-activa");
+  await sleep(750 * RITMO);
+
   scene.classList.remove("is-open");  // la luz se apaga
-  carta.classList.remove("rise");     // la carta se guarda
-  await sleep(1100 * RITMO);
+  await sleep(600 * RITMO);
 
   scene.classList.remove("flap-open");
   flap.classList.remove("open");      // la solapa vuelve a cerrarse
   await sleep(500 * RITMO);
   flap.classList.remove("behind");
-  await sleep(950 * RITMO);
+  await sleep(750 * RITMO);
 
   seal.classList.remove("crack");     // la cera se restaura sola
-  await sleep(700 * RITMO);
+  await sleep(650 * RITMO);
 
   estado = "sellado"; ocupada = false;
   envelope.setAttribute("aria-expanded", "false");
@@ -459,7 +459,7 @@ scene.addEventListener("keydown", (e) => {
 
 // Un toque dentro de la carta completa la escritura, pero ya no la cierra.
 carta.addEventListener("click", (e) => {
-  if (!carta.classList.contains("free")) return;
+  if (!carta.classList.contains("free") && !carta.classList.contains("abierta")) return;
   if (e.target.closest("a, button")) return;
   if (escribiendo) completarCarta();
 });
