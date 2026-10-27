@@ -6,15 +6,15 @@
    Escritura: máquina de escribir (mensaje personalizable)
    ═══════════════════════════════════════════════════════════════ */
 
- /* ┌──────────────────────────────────────────────────────────┐
-    │  MENSAJE PERSONALIZADO PARA NAYDÚ                         │
-    │  (edita las líneas de abajo si quieres cambiar algo)      │
-    └──────────────────────────────────────────────────────────┘ */
+/* ┌──────────────────────────────────────────────────────────┐
+   │  MENSAJE PERSONALIZADO PARA NAYDÚ                         │
+   │  (edita las líneas de abajo si quieres cambiar algo)      │
+   └──────────────────────────────────────────────────────────┘ */
 
-const TITULO    = "Para Naydú";          // Encabezado de la carta
-const SALUDO    = "Mi niña hermosa";     // Primera línea
+const TITULO = "Para Naydú";          // Encabezado de la carta
+const SALUDO = "Mi niña hermosa";     // Primera línea
 
-const MENSAJE   = [
+const MENSAJE = [
   "Mi niña sabes qué día es hoy",
   "sí, 27 de OCTUBRE, MI PRINCESA, HOY ES EL DÍA DE TU CUMPLEAÑOS",
   "mi amor de verdad quisiera poder pasar este día tan importante contigo",
@@ -97,32 +97,32 @@ const MENSAJE   = [
 ];
 
 const DESPEDIDA = "Con todo mi amor, siempre.";     // Cierre de la carta
-const FIRMA     = "— Tu canelita que te ama";         // Tu firma
+const FIRMA = "— Tu niño que te ama";         // Tu firma
 
 /* Velocidades de la escritura (milisegundos) */
 let VELOCIDAD_TECLA = 40;   // tiempo entre letras (menor = más rápido)
-let PAUSA_LINEA     = 400;  // pausa entre líneas
+let PAUSA_LINEA = 400;  // pausa entre líneas
 
 /* ═══════════════════════════════════════════════════════════════
    A partir de aquí no necesitas tocar nada.
    ═══════════════════════════════════════════════════════════════ */
 
-const stage      = document.getElementById("stage");
-const scene      = document.getElementById("scene");
-const envelope   = document.getElementById("envelope");
-const flap       = document.getElementById("flap");
-const carta      = document.getElementById("carta");
+const stage = document.getElementById("stage");
+const scene = document.getElementById("scene");
+const envelope = document.getElementById("envelope");
+const flap = document.getElementById("flap");
+const carta = document.getElementById("carta");
 const papelCarta = carta.querySelector(".carta-papel");
-const cerrarBtn  = document.getElementById("cerrarCarta");
+const cerrarBtn = document.getElementById("cerrarCarta");
 const pistaCarta = document.getElementById("pistaCarta");
-const seal       = document.getElementById("seal");
-const mensajeEl  = document.getElementById("mensaje");
-const firmaEl    = document.getElementById("firma");
-const musica     = document.getElementById("musica-fondo");
-const btnMusica  = document.getElementById("btn-musica");
+const seal = document.getElementById("seal");
+const mensajeEl = document.getElementById("mensaje");
+const firmaEl = document.getElementById("firma");
+const musica = document.getElementById("musica-fondo");
+const btnMusica = document.getElementById("btn-musica");
 
-let ocupada     = false;
-let estado      = "sellado";   // sellado | abriendo | abierto | cerrando
+let ocupada = false;
+let estado = "sellado";   // sellado | abriendo | abierto | cerrando
 let escribiendo = false;
 let escrituraToken = 0;
 
@@ -225,7 +225,7 @@ async function cerrarCarta() {
   envelope.focus({ preventScroll: true });
 }
 
-function alternar(){
+function alternar() {
   if (estado === "sellado") abrirCarta();
   else if (estado === "abierto") cerrarCarta();
 }
@@ -429,7 +429,7 @@ function explotarCorazones() {
     const chispa = document.createElement("span");
     chispa.className = "chispa";
 
-    const ang  = Math.random() * Math.PI * 2;
+    const ang = Math.random() * Math.PI * 2;
     const dist = 110 + Math.random() * 140;
 
     chispa.style.setProperty("--dx", (Math.cos(ang) * dist) + "px");
@@ -494,7 +494,7 @@ if (btnMusica && musica) {
   btnMusica.addEventListener("click", (e) => {
     e.stopPropagation(); // no disparar clic del sobre
     if (musica.paused) {
-      musica.play().catch(() => {});
+      musica.play().catch(() => { });
     } else {
       musica.pause();
     }
@@ -516,38 +516,38 @@ window.addEventListener("load", () => {
 
 /* ── FONDO: CAMPO DE FLORES NOCTURNO — generación dinámica ─────── */
 
-(function(){
+(function () {
   "use strict";
 
-  var azar = function(min, max){ return min + Math.random() * (max - min); };
+  var azar = function (min, max) { return min + Math.random() * (max - min); };
 
   /* Perfil de cada colina (en % de la pantalla) */
-  function yAtras(x){  return 58 + 7*Math.sin(x/14 + 1.2) + 3*Math.sin(x/6); }
-  function yMedio(x){  return 69 + 5*Math.sin(x/11 + 3.0) + 2.5*Math.sin(x/5 + 1); }
-  function yFrente(x){ return 81 + 4*Math.sin(x/9 + 0.5) + 2.0*Math.sin(x/4.2 + 2); }
+  function yAtras(x) { return 58 + 7 * Math.sin(x / 14 + 1.2) + 3 * Math.sin(x / 6); }
+  function yMedio(x) { return 69 + 5 * Math.sin(x / 11 + 3.0) + 2.5 * Math.sin(x / 5 + 1); }
+  function yFrente(x) { return 81 + 4 * Math.sin(x / 9 + 0.5) + 2.0 * Math.sin(x / 4.2 + 2); }
 
-  function trazarColina(id, funcion){
+  function trazarColina(id, funcion) {
     var puntos = [];
-    for (var x = 0; x <= 100; x += 2){ puntos.push(x.toFixed(2) + "," + funcion(x).toFixed(2)); }
+    for (var x = 0; x <= 100; x += 2) { puntos.push(x.toFixed(2) + "," + funcion(x).toFixed(2)); }
     document.getElementById(id).setAttribute("d",
       "M0," + funcion(0).toFixed(2) +
       " L" + puntos.join(" L") +
       " L100,100 L0,100 Z");
   }
-  trazarColina("colinaAtras",  yAtras);
-  trazarColina("colinaMedio",  yMedio);
+  trazarColina("colinaAtras", yAtras);
+  trazarColina("colinaMedio", yMedio);
   trazarColina("colinaFrente", yFrente);
 
   /* Estrellas en el cielo alto */
   var estrellas = document.getElementById("estrellas");
-  for (var i = 0; i < 95; i++){
+  for (var i = 0; i < 95; i++) {
     var e = document.createElement("span");
     e.className = "estrella";
     var tam = azar(1, 2.6);
-    e.style.width  = tam + "px";
+    e.style.width = tam + "px";
     e.style.height = tam + "px";
-    e.style.left   = azar(0, 100) + "%";
-    e.style.top    = azar(0, 58) + "%";
+    e.style.left = azar(0, 100) + "%";
+    e.style.top = azar(0, 58) + "%";
     e.style.setProperty("--d", azar(1.6, 4.2) + "s");
     e.style.setProperty("--delay", -azar(0, 4) + "s");
     estrellas.appendChild(e);
@@ -556,11 +556,11 @@ window.addEventListener("load", () => {
   /* Flores: pequeñas en la colina del fondo, grandes adelante */
   var flores = document.getElementById("flores");
 
-  function crearFlor(x, y, tam, opacidad){
+  function crearFlor(x, y, tam, opacidad) {
     var f = document.createElement("span");
     f.className = "flor";
     f.style.left = x + "%";
-    f.style.top  = y + "%";
+    f.style.top = y + "%";
     f.style.width = f.style.height = tam + "px";
     f.style.opacity = opacidad;
     f.style.setProperty("--tal", (tam * azar(0.9, 1.5)).toFixed(1) + "px");
@@ -573,18 +573,18 @@ window.addEventListener("load", () => {
   }
 
   /* Flores lejanas (colina media, casi en el horizonte) */
-  for (var j = 0; j < 48; j++){
+  for (var j = 0; j < 48; j++) {
     var xl = azar(0, 100);
     crearFlor(xl, yMedio(xl) + azar(0.5, 2.5), azar(3, 5.5), azar(.45, .7));
   }
 
   /* Flores del campo medio, llenando la ladera entre las dos colinas */
-  for (var w = 0; w < 50; w++){
+  for (var w = 0; w < 50; w++) {
     crearFlor(azar(0, 100), azar(72.5, 80), azar(4.5, 7), azar(.55, .8));
   }
 
   /* Flores del frente, más grandes cuanto más abajo (perspectiva) */
-  for (var k = 0; k < 105; k++){
+  for (var k = 0; k < 105; k++) {
     var x = azar(0, 100);
     var borde = yFrente(x);
     var y = borde + azar(0.5, 9);
@@ -594,7 +594,7 @@ window.addEventListener("load", () => {
 
   /* Luces flotantes (semillas de diente de león) */
   var luciernagas = document.getElementById("luciernagas");
-  for (var m = 0; m < 26; m++){
+  for (var m = 0; m < 26; m++) {
     var l = document.createElement("span");
     l.className = "luz";
     l.style.setProperty("--x", azar(0, 100) + "%");
@@ -620,7 +620,7 @@ window.addEventListener("load", () => {
     var escalaPetalo = Math.min(1.4, Math.max(0.95, ancho / 1200));
 
     petalos.innerHTML = "";
-    for (var p = 0; p < totalPetalos; p++){
+    for (var p = 0; p < totalPetalos; p++) {
       var pe = document.createElement("span");
       pe.className = "petalo";
       var tamBase = azar(16, 28) * escalaPetalo;
