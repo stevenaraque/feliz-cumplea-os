@@ -107,6 +107,7 @@ let PAUSA_LINEA     = 400;  // pausa entre líneas
    A partir de aquí no necesitas tocar nada.
    ═══════════════════════════════════════════════════════════════ */
 
+const stage      = document.getElementById("stage");
 const scene      = document.getElementById("scene");
 const envelope   = document.getElementById("envelope");
 const flap       = document.getElementById("flap");
@@ -468,6 +469,15 @@ if (cerrarBtn) {
   cerrarBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     cerrarCarta();
+  });
+}
+
+// Tocar fuera de la carta en el fondo oscuro también la cierra
+if (stage) {
+  stage.addEventListener("click", (e) => {
+    if (estado === "abierto" && !e.target.closest(".carta, #btn-musica")) {
+      cerrarCarta();
+    }
   });
 }
 
